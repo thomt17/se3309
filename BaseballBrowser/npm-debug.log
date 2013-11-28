@@ -1,0 +1,500 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'java' ]
+2 info using npm@1.3.14
+3 info using node@v0.10.22
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'java', null ]
+7 verbose cache add name=undefined spec="java" args=["java",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'java',
+8 verbose parsed url   path: 'java',
+8 verbose parsed url   href: 'java' }
+9 silly lockFile 23524be9-java java
+10 verbose lock java C:\Users\Thomas\AppData\Roaming\npm-cache\23524be9-java.lock
+11 silly lockFile 23524be9-java java
+12 silly lockFile 23524be9-java java
+13 verbose addNamed [ 'java', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile 0f6a664b-java java@
+16 verbose lock java@ C:\Users\Thomas\AppData\Roaming\npm-cache\0f6a664b-java.lock
+17 silly addNameRange { name: 'java', range: '*', hasData: false }
+18 verbose url raw java
+19 verbose url resolving [ 'https://registry.npmjs.org/', './java' ]
+20 verbose url resolved https://registry.npmjs.org/java
+21 info trying registry request attempt 1 at 12:07:52
+22 http GET https://registry.npmjs.org/java
+23 http 200 https://registry.npmjs.org/java
+24 silly registry.get cb [ 200,
+24 silly registry.get   { vary: 'Accept',
+24 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R15B03)',
+24 silly registry.get     etag: '"4UVDBWC5E497HYQRB7Q9MZ1LF"',
+24 silly registry.get     date: 'Thu, 28 Nov 2013 17:07:44 GMT',
+24 silly registry.get     'content-type': 'application/json',
+24 silly registry.get     'content-length': '184683' } ]
+25 silly addNameRange number 2 { name: 'java', range: '*', hasData: true }
+26 silly addNameRange versions [ 'java',
+26 silly addNameRange   [ '0.0.1',
+26 silly addNameRange     '0.0.2',
+26 silly addNameRange     '0.0.3',
+26 silly addNameRange     '0.0.4',
+26 silly addNameRange     '0.0.5',
+26 silly addNameRange     '0.0.6',
+26 silly addNameRange     '0.1.0',
+26 silly addNameRange     '0.1.1',
+26 silly addNameRange     '0.1.2',
+26 silly addNameRange     '0.1.3',
+26 silly addNameRange     '0.2.0',
+26 silly addNameRange     '0.2.1',
+26 silly addNameRange     '0.2.2',
+26 silly addNameRange     '0.2.3',
+26 silly addNameRange     '0.2.4',
+26 silly addNameRange     '0.2.5',
+26 silly addNameRange     '0.2.6',
+26 silly addNameRange     '0.2.7',
+26 silly addNameRange     '0.2.8',
+26 silly addNameRange     '0.2.9' ] ]
+27 verbose addNamed [ 'java', '0.2.9' ]
+28 verbose addNamed [ '0.2.9', '0.2.9' ]
+29 silly lockFile 1e1dbba0-java-0-2-9 java@0.2.9
+30 verbose lock java@0.2.9 C:\Users\Thomas\AppData\Roaming\npm-cache\1e1dbba0-java-0-2-9.lock
+31 silly lockFile 0f275df6-ry-npmjs-org-java-java-0-2-9-tgz https://registry.npmjs.org/java/-/java-0.2.9.tgz
+32 verbose lock https://registry.npmjs.org/java/-/java-0.2.9.tgz C:\Users\Thomas\AppData\Roaming\npm-cache\0f275df6-ry-npmjs-org-java-java-0-2-9-tgz.lock
+33 verbose addRemoteTarball [ 'https://registry.npmjs.org/java/-/java-0.2.9.tgz',
+33 verbose addRemoteTarball   '81f446974d797b2488de2acbb53f79ba2e586933' ]
+34 info retry fetch attempt 1 at 12:07:54
+35 verbose fetch to= C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\tmp.tgz
+36 http GET https://registry.npmjs.org/java/-/java-0.2.9.tgz
+37 http 200 https://registry.npmjs.org/java/-/java-0.2.9.tgz
+38 verbose tar unpack C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\tmp.tgz
+39 silly lockFile c2e6e9a1-4649-0-10066542099229991-package tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+40 verbose lock tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package C:\Users\Thomas\AppData\Roaming\npm-cache\c2e6e9a1-4649-0-10066542099229991-package.lock
+41 silly lockFile 208542f5-4649-0-10066542099229991-tmp-tgz tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\tmp.tgz
+42 verbose lock tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\tmp.tgz C:\Users\Thomas\AppData\Roaming\npm-cache\208542f5-4649-0-10066542099229991-tmp-tgz.lock
+43 silly gunzTarPerm modes [ '755', '644' ]
+44 silly gunzTarPerm extractEntry package.json
+45 silly gunzTarPerm extractEntry .npmignore
+46 silly gunzTarPerm extractEntry README.md
+47 silly gunzTarPerm extractEntry LICENSE
+48 silly gunzTarPerm extractEntry index.js
+49 silly gunzTarPerm extractEntry mnm.js
+50 silly gunzTarPerm extractEntry testHelpers.js
+51 silly gunzTarPerm extractEntry touch.py
+52 silly gunzTarPerm extractEntry jarjar.rule
+53 silly gunzTarPerm extractEntry binding.gyp
+54 silly gunzTarPerm extractEntry commons-lang3-node-java.jar
+55 silly gunzTarPerm extractEntry compile-java-code.sh
+56 silly gunzTarPerm extractEntry projectFilesBackup/.idea/libraries/sass_stdlib.xml
+57 silly gunzTarPerm extractEntry projectFilesBackup1/.idea/libraries/sass_stdlib.xml
+58 silly gunzTarPerm extractEntry src/methodCallBaton.cpp
+59 silly gunzTarPerm extractEntry src/java.cpp
+60 silly gunzTarPerm extractEntry src/javaObject.cpp
+61 silly gunzTarPerm extractEntry src/javaObject.h
+62 silly gunzTarPerm extractEntry src/javaScope.cpp
+63 silly gunzTarPerm extractEntry src/javaScope.h
+64 silly gunzTarPerm extractEntry src/java.h
+65 silly gunzTarPerm extractEntry src/methodCallBaton.h
+66 silly gunzTarPerm extractEntry src/nodeJavaBridge.cpp
+67 silly gunzTarPerm extractEntry src/node_NodeDynamicProxyClass.h
+68 silly gunzTarPerm extractEntry src/utils.cpp
+69 silly gunzTarPerm extractEntry src/utils.h
+70 silly gunzTarPerm extractEntry src-java/node/NodeDynamicProxyClass.class
+71 silly gunzTarPerm extractEntry src-java/node/NodeDynamicProxyClass.java
+72 silly gunzTarPerm extractEntry test/utils-types-test.js
+73 silly gunzTarPerm extractEntry test/simple-test.js
+74 silly gunzTarPerm extractEntry test/javaObject-test.js
+75 silly gunzTarPerm extractEntry test/java-staticField-test.js
+76 silly gunzTarPerm extractEntry test/java-newInstance-test.js
+77 silly gunzTarPerm extractEntry test/java-callStaticMethod-test.js
+78 silly gunzTarPerm extractEntry test/instanceof-test.js
+79 silly gunzTarPerm extractEntry test/importClass-test.js
+80 silly gunzTarPerm extractEntry test/dynamicProxy-test.js
+81 silly gunzTarPerm extractEntry test/awt-test.js
+82 silly gunzTarPerm extractEntry test/Test$SuperClass.class
+83 silly gunzTarPerm extractEntry test/TestExceptions.java
+84 silly gunzTarPerm extractEntry test/commons-lang3-3.1.jar
+85 silly gunzTarPerm extractEntry test/TestExceptions.class
+86 silly gunzTarPerm extractEntry test/Test.java
+87 silly gunzTarPerm extractEntry test/Test.class
+88 silly gunzTarPerm extractEntry test/RunInterface$Interface1Arg.class
+89 silly gunzTarPerm extractEntry test/Test$SubClass.class
+90 silly gunzTarPerm extractEntry test/RunInterface.java
+91 silly gunzTarPerm extractEntry test/RunInterface.class
+92 silly gunzTarPerm extractEntry test/nodejs.png
+93 silly gunzTarPerm extractEntry test/RunInterface$InterfaceWithReturn.class
+94 silly gunzTarPerm extractEntry test/RunInterface$Interface0Arg.class
+95 silly gunzTarPerm extractEntry examples/lucene/example.js
+96 silly gunzTarPerm extractEntry examples/lucene/lucene-core-3.5.0.jar
+97 silly gunzTarPerm extractEntry examples/mixJavaAndNode/runMyClass.js
+98 silly gunzTarPerm extractEntry examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.class
+99 silly gunzTarPerm extractEntry examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.java
+100 silly gunzTarPerm extractEntry lib/nodeJavaBridge.js
+101 silly lockFile c2e6e9a1-4649-0-10066542099229991-package tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+102 silly lockFile c2e6e9a1-4649-0-10066542099229991-package tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+103 silly lockFile 208542f5-4649-0-10066542099229991-tmp-tgz tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\tmp.tgz
+104 silly lockFile 208542f5-4649-0-10066542099229991-tmp-tgz tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\tmp.tgz
+105 verbose tar pack [ 'C:\\Users\\Thomas\\AppData\\Roaming\\npm-cache\\java\\0.2.9\\package.tgz',
+105 verbose tar pack   'C:\\Users\\Thomas\\AppData\\Local\\Temp\\npm-12168-XE-uhM5n\\1385658474649-0.10066542099229991\\package' ]
+106 verbose tarball C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+107 verbose folder C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+108 silly lockFile c2e6e9a1-4649-0-10066542099229991-package tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+109 verbose lock tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package C:\Users\Thomas\AppData\Roaming\npm-cache\c2e6e9a1-4649-0-10066542099229991-package.lock
+110 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+111 verbose lock tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz C:\Users\Thomas\AppData\Roaming\npm-cache\0fcf00a1-npm-cache-java-0-2-9-package-tgz.lock
+112 silly lockFile c2e6e9a1-4649-0-10066542099229991-package tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+113 silly lockFile c2e6e9a1-4649-0-10066542099229991-package tar://C:\Users\Thomas\AppData\Local\Temp\npm-12168-XE-uhM5n\1385658474649-0.10066542099229991\package
+114 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+115 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+116 silly lockFile e274be45-ing-npm-cache-java-0-2-9-package C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package
+117 verbose lock C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package C:\Users\Thomas\AppData\Roaming\npm-cache\e274be45-ing-npm-cache-java-0-2-9-package.lock
+118 silly lockFile e274be45-ing-npm-cache-java-0-2-9-package C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package
+119 silly lockFile e274be45-ing-npm-cache-java-0-2-9-package C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package
+120 verbose tar unpack C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+121 silly lockFile 1711c25e-ing-npm-cache-java-0-2-9-package tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package
+122 verbose lock tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package C:\Users\Thomas\AppData\Roaming\npm-cache\1711c25e-ing-npm-cache-java-0-2-9-package.lock
+123 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+124 verbose lock tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz C:\Users\Thomas\AppData\Roaming\npm-cache\0fcf00a1-npm-cache-java-0-2-9-package-tgz.lock
+125 silly gunzTarPerm modes [ '755', '644' ]
+126 silly gunzTarPerm extractEntry package.json
+127 silly gunzTarPerm modified mode [ 'package.json', 438, 420 ]
+128 silly gunzTarPerm extractEntry .npmignore
+129 silly gunzTarPerm modified mode [ '.npmignore', 438, 420 ]
+130 silly gunzTarPerm extractEntry README.md
+131 silly gunzTarPerm modified mode [ 'README.md', 438, 420 ]
+132 silly gunzTarPerm extractEntry LICENSE
+133 silly gunzTarPerm modified mode [ 'LICENSE', 438, 420 ]
+134 silly gunzTarPerm extractEntry testHelpers.js
+135 silly gunzTarPerm modified mode [ 'testHelpers.js', 438, 420 ]
+136 silly gunzTarPerm extractEntry index.js
+137 silly gunzTarPerm modified mode [ 'index.js', 438, 420 ]
+138 silly gunzTarPerm extractEntry mnm.js
+139 silly gunzTarPerm modified mode [ 'mnm.js', 438, 420 ]
+140 silly gunzTarPerm extractEntry compile-java-code.sh
+141 silly gunzTarPerm modified mode [ 'compile-java-code.sh', 438, 420 ]
+142 silly gunzTarPerm extractEntry lib/nodeJavaBridge.js
+143 silly gunzTarPerm modified mode [ 'lib/nodeJavaBridge.js', 438, 420 ]
+144 silly gunzTarPerm extractEntry binding.gyp
+145 silly gunzTarPerm modified mode [ 'binding.gyp', 438, 420 ]
+146 silly gunzTarPerm extractEntry examples/lucene/example.js
+147 silly gunzTarPerm modified mode [ 'examples/lucene/example.js', 438, 420 ]
+148 silly gunzTarPerm extractEntry examples/lucene/lucene-core-3.5.0.jar
+149 silly gunzTarPerm modified mode [ 'examples/lucene/lucene-core-3.5.0.jar', 438, 420 ]
+150 silly gunzTarPerm extractEntry examples/mixJavaAndNode/runMyClass.js
+151 silly gunzTarPerm modified mode [ 'examples/mixJavaAndNode/runMyClass.js', 438, 420 ]
+152 silly gunzTarPerm extractEntry examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.class
+153 silly gunzTarPerm modified mode [ 'examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.class',
+153 silly gunzTarPerm   438,
+153 silly gunzTarPerm   420 ]
+154 silly gunzTarPerm extractEntry examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.java
+155 silly gunzTarPerm modified mode [ 'examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.java',
+155 silly gunzTarPerm   438,
+155 silly gunzTarPerm   420 ]
+156 silly gunzTarPerm extractEntry projectFilesBackup/.idea/libraries/sass_stdlib.xml
+157 silly gunzTarPerm modified mode [ 'projectFilesBackup/.idea/libraries/sass_stdlib.xml',
+157 silly gunzTarPerm   438,
+157 silly gunzTarPerm   420 ]
+158 silly gunzTarPerm extractEntry projectFilesBackup1/.idea/libraries/sass_stdlib.xml
+159 silly gunzTarPerm modified mode [ 'projectFilesBackup1/.idea/libraries/sass_stdlib.xml',
+159 silly gunzTarPerm   438,
+159 silly gunzTarPerm   420 ]
+160 silly gunzTarPerm extractEntry jarjar.rule
+161 silly gunzTarPerm modified mode [ 'jarjar.rule', 438, 420 ]
+162 silly gunzTarPerm extractEntry src/methodCallBaton.cpp
+163 silly gunzTarPerm modified mode [ 'src/methodCallBaton.cpp', 438, 420 ]
+164 silly gunzTarPerm extractEntry src/java.cpp
+165 silly gunzTarPerm modified mode [ 'src/java.cpp', 438, 420 ]
+166 silly gunzTarPerm extractEntry src/javaObject.cpp
+167 silly gunzTarPerm modified mode [ 'src/javaObject.cpp', 438, 420 ]
+168 silly gunzTarPerm extractEntry src/javaObject.h
+169 silly gunzTarPerm modified mode [ 'src/javaObject.h', 438, 420 ]
+170 silly gunzTarPerm extractEntry src/javaScope.cpp
+171 silly gunzTarPerm modified mode [ 'src/javaScope.cpp', 438, 420 ]
+172 silly gunzTarPerm extractEntry src/javaScope.h
+173 silly gunzTarPerm modified mode [ 'src/javaScope.h', 438, 420 ]
+174 silly gunzTarPerm extractEntry src/java.h
+175 silly gunzTarPerm modified mode [ 'src/java.h', 438, 420 ]
+176 silly gunzTarPerm extractEntry src/methodCallBaton.h
+177 silly gunzTarPerm modified mode [ 'src/methodCallBaton.h', 438, 420 ]
+178 silly gunzTarPerm extractEntry src/nodeJavaBridge.cpp
+179 silly gunzTarPerm modified mode [ 'src/nodeJavaBridge.cpp', 438, 420 ]
+180 silly gunzTarPerm extractEntry src/node_NodeDynamicProxyClass.h
+181 silly gunzTarPerm modified mode [ 'src/node_NodeDynamicProxyClass.h', 438, 420 ]
+182 silly gunzTarPerm extractEntry src/utils.cpp
+183 silly gunzTarPerm modified mode [ 'src/utils.cpp', 438, 420 ]
+184 silly gunzTarPerm extractEntry src/utils.h
+185 silly gunzTarPerm modified mode [ 'src/utils.h', 438, 420 ]
+186 silly gunzTarPerm extractEntry src-java/node/NodeDynamicProxyClass.class
+187 silly gunzTarPerm modified mode [ 'src-java/node/NodeDynamicProxyClass.class', 438, 420 ]
+188 silly gunzTarPerm extractEntry src-java/node/NodeDynamicProxyClass.java
+189 silly gunzTarPerm modified mode [ 'src-java/node/NodeDynamicProxyClass.java', 438, 420 ]
+190 silly gunzTarPerm extractEntry test/awt-test.js
+191 silly gunzTarPerm modified mode [ 'test/awt-test.js', 438, 420 ]
+192 silly gunzTarPerm extractEntry test/dynamicProxy-test.js
+193 silly gunzTarPerm modified mode [ 'test/dynamicProxy-test.js', 438, 420 ]
+194 silly gunzTarPerm extractEntry test/importClass-test.js
+195 silly gunzTarPerm modified mode [ 'test/importClass-test.js', 438, 420 ]
+196 silly gunzTarPerm extractEntry test/instanceof-test.js
+197 silly gunzTarPerm modified mode [ 'test/instanceof-test.js', 438, 420 ]
+198 silly gunzTarPerm extractEntry test/java-callStaticMethod-test.js
+199 silly gunzTarPerm modified mode [ 'test/java-callStaticMethod-test.js', 438, 420 ]
+200 silly gunzTarPerm extractEntry test/java-newInstance-test.js
+201 silly gunzTarPerm modified mode [ 'test/java-newInstance-test.js', 438, 420 ]
+202 silly gunzTarPerm extractEntry test/java-staticField-test.js
+203 silly gunzTarPerm modified mode [ 'test/java-staticField-test.js', 438, 420 ]
+204 silly gunzTarPerm extractEntry test/javaObject-test.js
+205 silly gunzTarPerm modified mode [ 'test/javaObject-test.js', 438, 420 ]
+206 silly gunzTarPerm extractEntry test/simple-test.js
+207 silly gunzTarPerm modified mode [ 'test/simple-test.js', 438, 420 ]
+208 silly gunzTarPerm extractEntry test/utils-types-test.js
+209 silly gunzTarPerm modified mode [ 'test/utils-types-test.js', 438, 420 ]
+210 silly gunzTarPerm extractEntry test/Test$SubClass.class
+211 silly gunzTarPerm modified mode [ 'test/Test$SubClass.class', 438, 420 ]
+212 silly gunzTarPerm extractEntry test/RunInterface$Interface0Arg.class
+213 silly gunzTarPerm modified mode [ 'test/RunInterface$Interface0Arg.class', 438, 420 ]
+214 silly gunzTarPerm extractEntry test/RunInterface$InterfaceWithReturn.class
+215 silly gunzTarPerm modified mode [ 'test/RunInterface$InterfaceWithReturn.class', 438, 420 ]
+216 silly gunzTarPerm extractEntry test/RunInterface.class
+217 silly gunzTarPerm modified mode [ 'test/RunInterface.class', 438, 420 ]
+218 silly gunzTarPerm extractEntry test/RunInterface.java
+219 silly gunzTarPerm modified mode [ 'test/RunInterface.java', 438, 420 ]
+220 silly gunzTarPerm extractEntry test/nodejs.png
+221 silly gunzTarPerm modified mode [ 'test/nodejs.png', 438, 420 ]
+222 silly gunzTarPerm extractEntry test/commons-lang3-3.1.jar
+223 silly gunzTarPerm modified mode [ 'test/commons-lang3-3.1.jar', 438, 420 ]
+224 silly gunzTarPerm extractEntry test/Test$SuperClass.class
+225 silly gunzTarPerm modified mode [ 'test/Test$SuperClass.class', 438, 420 ]
+226 silly gunzTarPerm extractEntry test/Test.class
+227 silly gunzTarPerm modified mode [ 'test/Test.class', 438, 420 ]
+228 silly gunzTarPerm extractEntry test/Test.java
+229 silly gunzTarPerm modified mode [ 'test/Test.java', 438, 420 ]
+230 silly gunzTarPerm extractEntry test/TestExceptions.class
+231 silly gunzTarPerm modified mode [ 'test/TestExceptions.class', 438, 420 ]
+232 silly gunzTarPerm extractEntry test/TestExceptions.java
+233 silly gunzTarPerm modified mode [ 'test/TestExceptions.java', 438, 420 ]
+234 silly gunzTarPerm extractEntry test/RunInterface$Interface1Arg.class
+235 silly gunzTarPerm modified mode [ 'test/RunInterface$Interface1Arg.class', 438, 420 ]
+236 silly gunzTarPerm extractEntry commons-lang3-node-java.jar
+237 silly gunzTarPerm modified mode [ 'commons-lang3-node-java.jar', 438, 420 ]
+238 silly gunzTarPerm extractEntry touch.py
+239 silly gunzTarPerm modified mode [ 'touch.py', 438, 420 ]
+240 silly lockFile 1711c25e-ing-npm-cache-java-0-2-9-package tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package
+241 silly lockFile 1711c25e-ing-npm-cache-java-0-2-9-package tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package
+242 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+243 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+244 verbose chmod C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz 644
+245 silly chown skipping for windows C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+246 silly lockFile 0f275df6-ry-npmjs-org-java-java-0-2-9-tgz https://registry.npmjs.org/java/-/java-0.2.9.tgz
+247 silly lockFile 0f275df6-ry-npmjs-org-java-java-0-2-9-tgz https://registry.npmjs.org/java/-/java-0.2.9.tgz
+248 silly lockFile 1e1dbba0-java-0-2-9 java@0.2.9
+249 silly lockFile 1e1dbba0-java-0-2-9 java@0.2.9
+250 silly lockFile 0f6a664b-java java@
+251 silly lockFile 0f6a664b-java java@
+252 silly resolved [ { name: 'java',
+252 silly resolved     description: 'Bridge API to connect with existing Java APIs.',
+252 silly resolved     author: { name: 'Joe Ferner', email: 'joe.ferner@nearinfinity.com' },
+252 silly resolved     keywords: [ 'java', 'jvm', 'bridge' ],
+252 silly resolved     version: '0.2.9',
+252 silly resolved     engines: { node: '>=0.6.0' },
+252 silly resolved     maintainers: [ [Object], [Object] ],
+252 silly resolved     bugs: { url: 'https://github.com/nearinfinity/node-java/issues' },
+252 silly resolved     license: 'MIT',
+252 silly resolved     repository:
+252 silly resolved      { type: 'git',
+252 silly resolved        url: 'https://github.com/nearinfinity/node-java.git' },
+252 silly resolved     dependencies: {},
+252 silly resolved     devDependencies: { nodeunit: '~0.6.4', memwatch: '~0.2.0', async: '~0.1.22' },
+252 silly resolved     scripts: { test: 'nodeunit test', install: 'node-gyp rebuild' },
+252 silly resolved     main: './index.js',
+252 silly resolved     gypfile: true,
+252 silly resolved     readme: '# java\n\nBridge API to connect with existing Java APIs.\n\n[Google Groups Discussion Forum](https://groups.google.com/forum/#!forum/node-java)\n\n## Installation Linux/Windows\n\n```bash\n$ export JAVA_HOME=/usr/local/share/jdk1.6.0_30\n$ npm install java\n```\n\nNotes:\n* node-gyp requires python 2.x not python 3.x. See https://github.com/TooTallNate/node-gyp/issues/155 for more details.\n* If you see an error such as "No rule to make target \'/opt/jdk1.7.0_09/jre/lib/amd64/server/libjvm.so\', needed by \'build/depsVerified\'.  Stop."\n      this means that your JAVA_HOME is not set correctly and you need to verify the location of libjvm.so or jvm.lib.\n* If you see an error such as "Error: The specified module could not be found. \n      xxxxxx\\node_modules\\java\\build\\Release\\nodejavabridge_bindings.node".\n      Ensure the directory where jvm.dll exists is in your PATH. (e.g. C:\\Program Files (x86)\\Java\\jdk1.6.0_18\\jre\\bin\\client).\n      This path cannot have quotes.\n\n\n## Installation Mac\n\n```bash\n$ npm install java\n```\n\n_Mavericks Users: If you are having problems finding \'jni.h\' please see [Issue #86](https://github.com/nearinfinity/node-java/issues/86)_\n\n## Installation ARM (Raspberry Pi)\n\n```bash\nGYP_DEFINES="armv7=0" CCFLAGS=\'-march=armv6\' CXXFLAGS=\'-march=armv6\' npm install java\n```\n\n## Manual compile (Using node-gyp)\n\n```bash\n./compile-java-code.sh\nnode-gyp configure build\nnpm test\n```\n\n_NOTE: You will need node-gyp installed using "npm install -g node-gyp"_\n\n## Quick Examples\n\n```javascript\nvar java = require("java");\njava.classpath.push("commons-lang3-3.1.jar");\njava.classpath.push("commons-io.jar");\n\nvar list = java.newInstanceSync("java.util.ArrayList");\n\njava.newInstance("java.util.ArrayList", function(err, list) {\n  list.addSync("item1");\n  list.addSync("item2");\n});\n\nvar ArrayList = java.import(\'java.util.ArrayList\');\nvar list = new ArrayList();\nlist.addSync(\'item1\');\n```\n\n### Create a char array\n\n```javascript\nvar charArray = java.newArray("char", "hello world\\n".split(\'\'));\n```\n\n### Create a byte array\n\n```javascript\nvar byteArray = java.newArray(\n  "byte",\n  "hello world\\n"\n    .split(\'\')\n    .map(function(c) { return java.newByte(str.charCodeAt(c)); });\n```\n\n### Using java.lang.Long and long\n\nJavaScript only supports 32-bit integers. Because of this java longs must be treated specially.\nWhen getting a long result the value may be truncated. If you need the original value there is\na property off of the result called "longValue" which contains the un-truncated value as a string.\nIf you are calling a method that takes a long you must create it using [java.newInstance](#javaNewInstance).\n\n```javascript\nvar javaLong = java.newInstanceSync("java.lang.Long", 5);\nconsole.log(\'Possibly truncated long value: \' + javaLong);\nconsole.log(\'Original long value (as a string): \' + javaLong.longValue);\njava.callStaticMethodSync("Test", "staticMethodThatTakesALong", javaLong);\n```\n\n### Exceptions\n\nExceptions from calling methods either caught using JavaScript try/catch block or passed\nto a callback as the first parameter may have a property named "cause" which has a reference\nto the Java Exception object which caused the error.\n\n```javascript\ntry {\n  java.methodThatThrowsExceptionSync();\n} catch(ex) {\n  console.log(ex.cause.getMessageSync());\n}\n```\n\n# Release Notes\n\n### v0.2.0\n\n* java.lang.Long and long primitives are handled better. See\n  \\([Issue #37](https://github.com/nearinfinity/node-java/issues/37)\\) and\n  \\([Issue #40](https://github.com/nearinfinity/node-java/issues/40)\\).\n\n# Index\n\n## java\n * [classpath](#javaClasspath)\n * [options](#javaOptions)\n * [import](#javaImport)\n * [newInstance](#javaNewInstance)\n * [instanceOf](#javaInstanceOf)\n * [callStaticMethod](#javaCallStaticMethod)\n * [getStaticFieldValue](#javaGetStaticFieldValue)\n * [setStaticFieldValue](#javaSetStaticFieldValue)\n * [newArray](#javaNewArray)\n * [newByte](#javaNewByte)\n * [newShort](#javaNewShort)\n * [newLong](#javaNewLong)\n * [newChar](#javaNewChar)\n * [newDouble](#javaNewDouble)\n * [newFloat](#javaNewFloat)\n * [newProxy](#javaNewProxy)\n\n## java objects\n * [Call Method](#javaObjectCallMethod)\n * [Get/Set Field](#javaObjectGetSetField)\n\n# API Documentation\n\n<a name="java"/>\n## java\n\n<a name="javaClasspath" />\n**java.classpath**\n\nArray of paths or jars to pass to the creation of the JVM.\n\nAll items must be added to the classpath before calling any other node-java methods.\n\n__Example__\n\n    java.classpath.push(\'commons.io.jar\');\n\n<a name="javaOptions" />\n**java.options**\n\nArray of options to pass to the creation of the JVM.\n\nAll items must be added to the options before calling any other node-java methods.\n\n__Example__\n\n    java.options.push(\'-Djava.awt.headless=true\');\n    java.options.push(\'-Xmx1024m\');\n\n<a name="javaImport" />\n**java.import(className)**\n\nLoads the class given by className such that it acts and feels like a javascript object.\n\n__Arguments__\n\n * className - The name of the class to create. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n\n__Example__\n\n    var Test = java.import(\'Test\');\n    Test.someStaticMethodSync(5);\n    console.log(Test.someStaticField);\n\n    var test = new Test();\n    list.instanceMethodSync(\'item1\');\n\n<a name="javaNewInstance" />\n**java.newInstance(className, [args...], callback)**\n\n**java.newInstanceSync(className, [args...]) : result**\n\nCreates an instance of the specified class. If you are using the sync method an exception will be throw if an error occures,\notherwise it will be the first argument in the callback.\n\n__Arguments__\n\n * className - The name of the class to create. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n * callback(err, item) - Callback to be called when the class is created.\n\n__Example__\n\n    var list = java.newInstanceSync("java.util.ArrayList");\n\n    java.newInstance("java.util.ArrayList", function(err, list) {\n      if(err) { console.error(err); return; }\n      // new list\n    });\n\n<a name="javaInstanceOf" />\n**java.instanceOf(javaObject, className)**\n\nDetermines of a javaObject is an instance of a class.\n\n__Arguments__\n\n * javaObject - Instance of a java object returned from a method or from newInstance.\n * className - A string class name.\n\n__Example__\n\n    var obj = java.newInstanceSync("my.package.SubClass");\n\n    if(java.instanceOf(obj, "my.package.SuperClass")) {\n      console.log("obj is an instance of SuperClass");\n    }\n\n<a name="javaCallStaticMethod" />\n**java.callStaticMethod(className, methodName, [args...], callback)**\n\n**java.callStaticMethodSync(className, methodName, [args...]) : result**\n\nCalls a static method on the specified class. If you are using the sync method an exception will be throw if an error occures,\notherwise it will be the first argument in the callback.\n\n__Arguments__\n\n * className - The name of the class to call the method on. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n * methodName - The name of the method to call.\n * callback(err, item) - Callback to be called when the class is created.\n\n__Example__\n\n    var result = java.callStaticMethodSync("com.nearinfinty.MyClass", "doSomething", 42, "test");\n\n    java.callStaticMethod("com.nearinfinty.MyClass", "doSomething", 42, "test", function(err, results) {\n      if(err) { console.error(err); return; }\n      // results from doSomething\n    });\n\n<a name="javaGetStaticFieldValue" />\n**java.getStaticFieldValue(className, fieldName)**\n\nGets a static field value from the specified class.\n\n__Arguments__\n\n * className - The name of the class to get the value from. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n * fieldName - The name of the field to get the value from.\n\n__Example__\n\n    var data = java.getStaticFieldValue("com.nearinfinty.MyClass", "data");\n\n<a name="javaSetStaticFieldValue" />\n**java.setStaticFieldValue(className, fieldName, newValue)**\n\nSets a static field value on the specified class.\n\n__Arguments__\n\n * className - The name of the class to set the value on. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n * fieldName - The name of the field to set the value on.\n * newValue - The new value to assign to the field.\n\n__Example__\n\n    java.getStaticFieldValue("com.nearinfinty.MyClass", "data", "Hello World");\n\n<a name="javaNewArray" />\n**java.newArray(className, values[])**\n\nCreates a new java array of type class.\n\n__Arguments__\n\n * className - The name of the type of array elements. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n * values - A javascript array of values to assign to the java array.\n\n__Example__\n\n    var newArray = java.newArray("java.lang.String", ["item1", "item2", "item3"]);\n\n<a name="javaNewByte" />\n**java.newByte(val)**\n\nCreates a new java byte. This is needed because javascript does not have the concept of a byte.\n\n__Arguments__\n\n * val - The value of the java byte.\n\n__Example__\n\n    var b = java.newByte(12);\n\n<a name="javaNewShort" />\n**java.newShort(val)**\n\nCreates a new java short. This is needed because javascript does not have the concept of a short.\n\n__Arguments__\n\n * val - The value of the java short.\n\n__Example__\n\n    var s = java.newShort(12);\n\n<a name="javaNewLong" />\n**java.newLong(val)**\n\nCreates a new java long. This is needed because javascript does not have the concept of a long.\n\n__Arguments__\n\n * val - The value of the java long.\n\n__Example__\n\n    var s = java.newLong(12);\n\n<a name="javaNewChar" />\n**java.newChar(val)**\n\nCreates a new java char. This is needed because javascript does not have the concept of a char.\n\n__Arguments__\n\n * val - The value of the java char.\n\n__Example__\n\n    var ch = java.newChar(\'a\');\n\n<a name="javaNewDouble" />\n**java.newDouble(val)**\n\nCreates a new java double. This is needed to force javascript\'s number to a double to call some methods.\n\n__Arguments__\n\n * val - The value of the java double.\n\n__Example__\n\n    var d = java.newDouble(3.14);\n\n<a name="javaNewFloat" />\n**java.newFloat(val)**\n\nCreates a new java float. This is needed to force javascript\'s number to a float to call some methods.\n\n__Arguments__\n\n * val - The value of the java float.\n\n__Example__\n\n    var f = java.newFloat(3.14);\n\n<a name="javaNewProxy" />\n**java.newProxy(interfaceName, functions)**\n\nCreates a new java Proxy for the given interface. Functions passed in will run on the v8 main thread and not a new thread.\n\nThe returned object has two methods ref() and unref() which you can use to maintain references to prevent premature\ngarbage collection. You must call these methods to ensure the proxy stays around.\n\n__Arguments__\n\n * interfaceName - The name of the interface to proxy. For subclasses seperate using a \'$\' (eg. com.nearinfinty.MyClass$SubClass)\n * functions - A hash of functions matching the function in the interface.\n\n__Example__\n\n    var myProxy = java.newProxy(\'java.lang.Runnable\', {\n      run: function () {\n        // This is actually run on the v8 thread and not the new java thread\n        console.log("hello from thread");\n      }\n    });\n\n    var thread = java.newInstanceSync("java.lang.Thread", myProxy);\n    thread.start();\n\n<a name="javaObject"/>\n## java object\n\n<a name="javaObjectCallMethod" />\n**obj._methodName_([args...], callback)**\n\n**obj._methodNameSync_([args...]) : result**\n\nOnce you have a java object either by creating a new instance or as a result of a method call you can then call methods on that object.\nAll public, non-static methods are exposed in synchronous and asynchronous flavors.\n\n__Arguments__\n\n * args - The arguments to pass to the method.\n * callback(err, item) - Callback to be called when the method has completed.\n\n__Example__\n\n    var list = java.newInstanceSync("java.util.ArrayList");\n    list.addSync("item1");\n    list.add("item2", function(err, result) {\n      if(err) { console.error(err); return; }\n    });\n\n<a name="javaObjectGetSetField" />\n**obj._fieldName_ = val**\n\n**val = obj._fieldName_**\n\nOnce you have a java object either by creating a new instance or as a result of a method call you can get instance\nfield values.\n\n__Example__\n\n    var list = java.newInstanceSync("com.nearinfinty.MyClass");\n    list.data = "test";\n    var data = list.data;\n\n## License\n\n(The MIT License)\n\nCopyright (c) 2012 Near Infinity Corporation\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n"Software"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+252 silly resolved     readmeFilename: 'README.md',
+252 silly resolved     homepage: 'https://github.com/nearinfinity/node-java',
+252 silly resolved     _id: 'java@0.2.9',
+252 silly resolved     dist: { shasum: 'bd4275db2a606e8f1333b20e4a479fabc97140dc' },
+252 silly resolved     _from: 'java@',
+252 silly resolved     _resolved: 'https://registry.npmjs.org/java/-/java-0.2.9.tgz' } ]
+253 info install java@0.2.9 into C:\Users\Thomas\Documents\nodejs\BaseballBrowser
+254 info installOne java@0.2.9
+255 info C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java unbuild
+256 verbose tar unpack C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+257 silly lockFile 27fad4b7-aseballBrowser-node-modules-java tar://C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java
+258 verbose lock tar://C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java C:\Users\Thomas\AppData\Roaming\npm-cache\27fad4b7-aseballBrowser-node-modules-java.lock
+259 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+260 verbose lock tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz C:\Users\Thomas\AppData\Roaming\npm-cache\0fcf00a1-npm-cache-java-0-2-9-package-tgz.lock
+261 silly gunzTarPerm modes [ '755', '644' ]
+262 silly gunzTarPerm extractEntry package.json
+263 silly gunzTarPerm modified mode [ 'package.json', 438, 420 ]
+264 silly gunzTarPerm extractEntry .npmignore
+265 silly gunzTarPerm modified mode [ '.npmignore', 438, 420 ]
+266 silly gunzTarPerm extractEntry README.md
+267 silly gunzTarPerm modified mode [ 'README.md', 438, 420 ]
+268 silly gunzTarPerm extractEntry LICENSE
+269 silly gunzTarPerm modified mode [ 'LICENSE', 438, 420 ]
+270 silly gunzTarPerm extractEntry testHelpers.js
+271 silly gunzTarPerm modified mode [ 'testHelpers.js', 438, 420 ]
+272 silly gunzTarPerm extractEntry index.js
+273 silly gunzTarPerm modified mode [ 'index.js', 438, 420 ]
+274 silly gunzTarPerm extractEntry mnm.js
+275 silly gunzTarPerm modified mode [ 'mnm.js', 438, 420 ]
+276 silly gunzTarPerm extractEntry compile-java-code.sh
+277 silly gunzTarPerm modified mode [ 'compile-java-code.sh', 438, 420 ]
+278 silly gunzTarPerm extractEntry lib/nodeJavaBridge.js
+279 silly gunzTarPerm modified mode [ 'lib/nodeJavaBridge.js', 438, 420 ]
+280 silly gunzTarPerm extractEntry binding.gyp
+281 silly gunzTarPerm modified mode [ 'binding.gyp', 438, 420 ]
+282 silly gunzTarPerm extractEntry examples/lucene/example.js
+283 silly gunzTarPerm modified mode [ 'examples/lucene/example.js', 438, 420 ]
+284 silly gunzTarPerm extractEntry examples/lucene/lucene-core-3.5.0.jar
+285 silly gunzTarPerm modified mode [ 'examples/lucene/lucene-core-3.5.0.jar', 438, 420 ]
+286 silly gunzTarPerm extractEntry examples/mixJavaAndNode/runMyClass.js
+287 silly gunzTarPerm modified mode [ 'examples/mixJavaAndNode/runMyClass.js', 438, 420 ]
+288 silly gunzTarPerm extractEntry examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.class
+289 silly gunzTarPerm modified mode [ 'examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.class',
+289 silly gunzTarPerm   438,
+289 silly gunzTarPerm   420 ]
+290 silly gunzTarPerm extractEntry examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.java
+291 silly gunzTarPerm modified mode [ 'examples/mixJavaAndNode/src/com/nearinfinity/nodeJava/MyClass.java',
+291 silly gunzTarPerm   438,
+291 silly gunzTarPerm   420 ]
+292 silly gunzTarPerm extractEntry projectFilesBackup/.idea/libraries/sass_stdlib.xml
+293 silly gunzTarPerm modified mode [ 'projectFilesBackup/.idea/libraries/sass_stdlib.xml',
+293 silly gunzTarPerm   438,
+293 silly gunzTarPerm   420 ]
+294 silly gunzTarPerm extractEntry projectFilesBackup1/.idea/libraries/sass_stdlib.xml
+295 silly gunzTarPerm modified mode [ 'projectFilesBackup1/.idea/libraries/sass_stdlib.xml',
+295 silly gunzTarPerm   438,
+295 silly gunzTarPerm   420 ]
+296 silly gunzTarPerm extractEntry jarjar.rule
+297 silly gunzTarPerm modified mode [ 'jarjar.rule', 438, 420 ]
+298 silly gunzTarPerm extractEntry src/methodCallBaton.cpp
+299 silly gunzTarPerm modified mode [ 'src/methodCallBaton.cpp', 438, 420 ]
+300 silly gunzTarPerm extractEntry src/java.cpp
+301 silly gunzTarPerm modified mode [ 'src/java.cpp', 438, 420 ]
+302 silly gunzTarPerm extractEntry src/javaObject.cpp
+303 silly gunzTarPerm modified mode [ 'src/javaObject.cpp', 438, 420 ]
+304 silly gunzTarPerm extractEntry src/javaObject.h
+305 silly gunzTarPerm modified mode [ 'src/javaObject.h', 438, 420 ]
+306 silly gunzTarPerm extractEntry src/javaScope.cpp
+307 silly gunzTarPerm modified mode [ 'src/javaScope.cpp', 438, 420 ]
+308 silly gunzTarPerm extractEntry src/javaScope.h
+309 silly gunzTarPerm modified mode [ 'src/javaScope.h', 438, 420 ]
+310 silly gunzTarPerm extractEntry src/java.h
+311 silly gunzTarPerm modified mode [ 'src/java.h', 438, 420 ]
+312 silly gunzTarPerm extractEntry src/methodCallBaton.h
+313 silly gunzTarPerm modified mode [ 'src/methodCallBaton.h', 438, 420 ]
+314 silly gunzTarPerm extractEntry src/nodeJavaBridge.cpp
+315 silly gunzTarPerm modified mode [ 'src/nodeJavaBridge.cpp', 438, 420 ]
+316 silly gunzTarPerm extractEntry src/node_NodeDynamicProxyClass.h
+317 silly gunzTarPerm modified mode [ 'src/node_NodeDynamicProxyClass.h', 438, 420 ]
+318 silly gunzTarPerm extractEntry src/utils.cpp
+319 silly gunzTarPerm modified mode [ 'src/utils.cpp', 438, 420 ]
+320 silly gunzTarPerm extractEntry src/utils.h
+321 silly gunzTarPerm modified mode [ 'src/utils.h', 438, 420 ]
+322 silly gunzTarPerm extractEntry src-java/node/NodeDynamicProxyClass.class
+323 silly gunzTarPerm modified mode [ 'src-java/node/NodeDynamicProxyClass.class', 438, 420 ]
+324 silly gunzTarPerm extractEntry src-java/node/NodeDynamicProxyClass.java
+325 silly gunzTarPerm modified mode [ 'src-java/node/NodeDynamicProxyClass.java', 438, 420 ]
+326 silly gunzTarPerm extractEntry test/awt-test.js
+327 silly gunzTarPerm modified mode [ 'test/awt-test.js', 438, 420 ]
+328 silly gunzTarPerm extractEntry test/dynamicProxy-test.js
+329 silly gunzTarPerm modified mode [ 'test/dynamicProxy-test.js', 438, 420 ]
+330 silly gunzTarPerm extractEntry test/importClass-test.js
+331 silly gunzTarPerm modified mode [ 'test/importClass-test.js', 438, 420 ]
+332 silly gunzTarPerm extractEntry test/instanceof-test.js
+333 silly gunzTarPerm modified mode [ 'test/instanceof-test.js', 438, 420 ]
+334 silly gunzTarPerm extractEntry test/java-callStaticMethod-test.js
+335 silly gunzTarPerm modified mode [ 'test/java-callStaticMethod-test.js', 438, 420 ]
+336 silly gunzTarPerm extractEntry test/java-newInstance-test.js
+337 silly gunzTarPerm modified mode [ 'test/java-newInstance-test.js', 438, 420 ]
+338 silly gunzTarPerm extractEntry test/java-staticField-test.js
+339 silly gunzTarPerm modified mode [ 'test/java-staticField-test.js', 438, 420 ]
+340 silly gunzTarPerm extractEntry test/javaObject-test.js
+341 silly gunzTarPerm modified mode [ 'test/javaObject-test.js', 438, 420 ]
+342 silly gunzTarPerm extractEntry test/simple-test.js
+343 silly gunzTarPerm modified mode [ 'test/simple-test.js', 438, 420 ]
+344 silly gunzTarPerm extractEntry test/utils-types-test.js
+345 silly gunzTarPerm modified mode [ 'test/utils-types-test.js', 438, 420 ]
+346 silly gunzTarPerm extractEntry test/Test$SubClass.class
+347 silly gunzTarPerm modified mode [ 'test/Test$SubClass.class', 438, 420 ]
+348 silly gunzTarPerm extractEntry test/RunInterface$Interface0Arg.class
+349 silly gunzTarPerm modified mode [ 'test/RunInterface$Interface0Arg.class', 438, 420 ]
+350 silly gunzTarPerm extractEntry test/RunInterface$InterfaceWithReturn.class
+351 silly gunzTarPerm modified mode [ 'test/RunInterface$InterfaceWithReturn.class', 438, 420 ]
+352 silly gunzTarPerm extractEntry test/RunInterface.class
+353 silly gunzTarPerm modified mode [ 'test/RunInterface.class', 438, 420 ]
+354 silly gunzTarPerm extractEntry test/RunInterface.java
+355 silly gunzTarPerm modified mode [ 'test/RunInterface.java', 438, 420 ]
+356 silly gunzTarPerm extractEntry test/nodejs.png
+357 silly gunzTarPerm modified mode [ 'test/nodejs.png', 438, 420 ]
+358 silly gunzTarPerm extractEntry test/commons-lang3-3.1.jar
+359 silly gunzTarPerm modified mode [ 'test/commons-lang3-3.1.jar', 438, 420 ]
+360 silly gunzTarPerm extractEntry test/Test$SuperClass.class
+361 silly gunzTarPerm modified mode [ 'test/Test$SuperClass.class', 438, 420 ]
+362 silly gunzTarPerm extractEntry test/Test.class
+363 silly gunzTarPerm modified mode [ 'test/Test.class', 438, 420 ]
+364 silly gunzTarPerm extractEntry test/Test.java
+365 silly gunzTarPerm modified mode [ 'test/Test.java', 438, 420 ]
+366 silly gunzTarPerm extractEntry test/TestExceptions.class
+367 silly gunzTarPerm modified mode [ 'test/TestExceptions.class', 438, 420 ]
+368 silly gunzTarPerm extractEntry test/TestExceptions.java
+369 silly gunzTarPerm modified mode [ 'test/TestExceptions.java', 438, 420 ]
+370 silly gunzTarPerm extractEntry test/RunInterface$Interface1Arg.class
+371 silly gunzTarPerm modified mode [ 'test/RunInterface$Interface1Arg.class', 438, 420 ]
+372 silly gunzTarPerm extractEntry commons-lang3-node-java.jar
+373 silly gunzTarPerm modified mode [ 'commons-lang3-node-java.jar', 438, 420 ]
+374 silly gunzTarPerm extractEntry touch.py
+375 silly gunzTarPerm modified mode [ 'touch.py', 438, 420 ]
+376 silly lockFile 27fad4b7-aseballBrowser-node-modules-java tar://C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java
+377 silly lockFile 27fad4b7-aseballBrowser-node-modules-java tar://C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java
+378 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+379 silly lockFile 0fcf00a1-npm-cache-java-0-2-9-package-tgz tar://C:\Users\Thomas\AppData\Roaming\npm-cache\java\0.2.9\package.tgz
+380 info preinstall java@0.2.9
+381 verbose readDependencies using package.json deps
+382 verbose readDependencies using package.json deps
+383 silly resolved []
+384 verbose about to build C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java
+385 info build C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java
+386 verbose linkStuff [ false,
+386 verbose linkStuff   false,
+386 verbose linkStuff   false,
+386 verbose linkStuff   'C:\\Users\\Thomas\\Documents\\nodejs\\BaseballBrowser\\node_modules' ]
+387 info linkStuff java@0.2.9
+388 verbose linkBins java@0.2.9
+389 verbose linkMans java@0.2.9
+390 verbose rebuildBundles java@0.2.9
+391 info install java@0.2.9
+392 verbose unsafe-perm in lifecycle true
+393 info java@0.2.9 Failed to exec install script
+394 info C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules\java unbuild
+395 info preuninstall java@0.2.9
+396 info uninstall java@0.2.9
+397 verbose true,C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules,C:\Users\Thomas\Documents\nodejs\BaseballBrowser\node_modules unbuild java@0.2.9
+398 info postuninstall java@0.2.9
+399 error java@0.2.9 install: `node-gyp rebuild`
+399 error Exit status 1
+400 error Failed at the java@0.2.9 install script.
+400 error This is most likely a problem with the java package,
+400 error not with npm itself.
+400 error Tell the author that this fails on your system:
+400 error     node-gyp rebuild
+400 error You can get their info via:
+400 error     npm owner ls java
+400 error There is likely additional logging output above.
+401 error System Windows_NT 6.2.9200
+402 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "java"
+403 error cwd C:\Users\Thomas\Documents\nodejs\BaseballBrowser
+404 error node -v v0.10.22
+405 error npm -v 1.3.14
+406 error code ELIFECYCLE
+407 verbose exit [ 1, true ]
