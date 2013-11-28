@@ -58,6 +58,9 @@ public class BaseballBrowserMain extends JApplet {
 	    label.setHorizontalAlignment(JLabel.CENTER);
 	    label.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black));
 	    getContentPane().add(label, BorderLayout.CENTER);
+	    
+	    
+	    
 	}
 	
 
