@@ -93,7 +93,7 @@ public class BaseballBrowserMain extends JApplet {
 				String totalWins = resultSet.getString("totalWins"); 		//These are column names
 				String totalLosses = resultSet.getString("totalLosses");
 				String yearFounded = resultSet.getString("yearFounded");
-				text=(teamName+" Total Wins:"+totalWins+", Total Losses "+totalLosses+", founded in "+yearFounded);
+				text=(teamName+" Total Wins:"+totalWins+", Total Losses: "+totalLosses+", founded in "+yearFounded);
 				teamHistories.add(text);
 			}
 
@@ -166,6 +166,7 @@ public class BaseballBrowserMain extends JApplet {
 		
 		final JTextField yearField = new JTextField("2013");
 		
+		//THE LISTS
 		playerList = new JList();
 		final DefaultListModel playerModel = new DefaultListModel();
 		playerList.setModel(playerModel);
@@ -178,6 +179,8 @@ public class BaseballBrowserMain extends JApplet {
 		final DefaultListModel teamModel = new DefaultListModel();
 		teamList.setModel(teamModel);
 		
+		
+		//For viewing player careers
 		JButton viewPlayersBtn = new JButton("View Player Career");
 		viewPlayersBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -188,6 +191,8 @@ public class BaseballBrowserMain extends JApplet {
 
 		JButton viewGamesBtn = new JButton("View Games");
 		
+		
+		//Sets up the tabbed pane
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		
 		final JPanel viewPlayers = new JPanel();
@@ -216,17 +221,20 @@ public class BaseballBrowserMain extends JApplet {
 		final JList teamPlayers = new JList();
 		final DefaultListModel teamPlayersModel = new DefaultListModel();
 		
+		teamPlayers.setModel(teamPlayersModel);
+		
 		JButton viewTeamPlayersBtn = new JButton("View Team Players");
 		viewTeamPlayersBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				
+				teamPlayersModel.clear();
+				
 				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
 				String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
 				
 				for(Object player: queryTeamPlayers(team,"2013")){
 					teamPlayersModel.addElement(player);
 				}
-				
-				teamPlayers.setModel(teamPlayersModel);
 				
 				yearField.setText("2013");
 				
@@ -235,7 +243,7 @@ public class BaseballBrowserMain extends JApplet {
 			}
 		});
 		
-		teamPlayers.setModel(teamPlayersModel);
+		
 		
 		final JPanel teamsLowerPanel = new JPanel();
 		teamsLowerPanel.setLayout(new GridLayout(2,0));
@@ -265,14 +273,15 @@ public class BaseballBrowserMain extends JApplet {
 		JButton setYearBtn = new JButton("Change Year");
 		setYearBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				
+				teamPlayersModel.clear();
+				
 				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
 				String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
 				
 				for(Object player: queryTeamPlayers(team, yearField.getText())){
 					teamPlayersModel.addElement(player);
 				}
-				
-				teamPlayers.setModel(teamPlayersModel);
 
 			}
 		});
@@ -295,9 +304,8 @@ public class BaseballBrowserMain extends JApplet {
 		
 		
 		
-		//viewTeams.add(viewTeamsBtn);
 		JPanel viewGames = new JPanel();
-		//viewGames.add(viewGamesBtn);
+		
 		
 		tabbedPane.addTab("View Teams", viewTeams);
 		tabbedPane.addTab("View Player", viewPlayers);
