@@ -73,6 +73,39 @@ public class BaseballBrowserMain extends JApplet {
 		
 		return  playerHistories.toArray();
 	}
+	
+	public static Object[] queryTeamHistory() {
+		ArrayList<String> teamHistories = new ArrayList<String>();
+		try
+		{
+			String text="";
+			
+			// use a statement to gather data from the database
+			st = db2Conn.createStatement();
+			String myQuery = "SELECT * FROM TeamHistory ORDER BY TeamName";   		//BOOK is a table name
+			resultSet = st.executeQuery(myQuery); 		 // execute the query         
+			while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
+			{
+				String teamName = resultSet.getString("teamName"); 	//These are column names
+				String totalWins = resultSet.getString("totalWins"); 		//These are column names
+				String totalLosses = resultSet.getString("totalLosses");
+				String yearFounded = resultSet.getString("yearFounded");
+				text=(teamName+" Total Wins:"+totalWins+", Total Losses "+totalLosses+", founded in "+yearFounded);
+				teamHistories.add(text);
+			}
+
+			// clean up resources
+			resultSet.close();
+			st.close();
+		}
+		catch (SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
+		
+		return  teamHistories.toArray();
+	}
+	
 	public void init() {
 		
 		//Open the DB2 connection
@@ -214,19 +247,56 @@ public class BaseballBrowserMain extends JApplet {
 		@Override
 	    public void done() {
 	    	try {
-				Object[] playesr = get();
+				Object[] players = get();
+				
+				for( Object newRow : players ) {
+				    dcm.addElement( newRow );
+				}
+				
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    	
-	    	for( Object newRow : queryPlayerHistory() ) {
-			    dcm.addElement( newRow );
-		  }
+	    	
 	        
 	    }
 		
 	}
-	
+
+	public class loadTeamHistory extends SwingWorker<Object[], Void >{
+
+		DefaultListModel dcm;
+		
+		
+		public loadTeamHistory(DefaultListModel teamModel){
+			dcm = teamModel;
+		}
+		
+		@Override
+		protected Object[] doInBackground() throws Exception {
+			// TODO Auto-generated method stub
+			return queryTeamHistory();
+		}
+		
+		@Override
+	    public void done() {
+	    	try {
+				Object[] teams = get();
+				
+				for( Object newRow : teams ) {
+				    dcm.addElement( newRow );
+				}
+				
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    	
+	        
+	    }
+		
+	}
 
 }
