@@ -1,23 +1,35 @@
 package se3309;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 public class BaseballBrowserMain extends JApplet {
 
@@ -25,7 +37,7 @@ public class BaseballBrowserMain extends JApplet {
 	 * @param args
 	 */
 	static ResultSet resultSet;
-	static JComboBox playerList;
+	static JList playerList;
 	static Connection db2Conn;
 	static Statement st;
 	
@@ -58,6 +70,7 @@ public class BaseballBrowserMain extends JApplet {
 		{
 			sqle.printStackTrace();
 		}
+		
 		return  playerHistories.toArray();
 	}
 	public void init() {
@@ -77,23 +90,67 @@ public class BaseballBrowserMain extends JApplet {
 		}
 		
 		//Start the GUI
+		setSize(500, 500);
 		createGUI();
 	}
 
 	private void createGUI() {
-		playerList = new JComboBox(queryPlayerHistory());
-
-		JButton viewPlayers = new JButton("View Player Career");
-		viewPlayers.addActionListener(new ActionListener() {
+		
+		
+		playerList = new JList();
+		final DefaultListModel playerModel = new DefaultListModel();
+		playerList.setModel(playerModel);
+		
+		JButton viewPlayersBtn = new JButton("View Player Career");
+		viewPlayersBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				queryPlayerByYear(((String) playerList.getSelectedItem()).split(" #")[0]);
+				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
 
 			}
 		});
 
-		getContentPane().setLayout(new GridLayout(0,1));
-		getContentPane().add(playerList);
-		getContentPane().add(viewPlayers);
+		
+		JButton viewTeamsBtn = new JButton("View Teams");
+		JButton viewGamesBtn = new JButton("View Games");
+		
+		final JTabbedPane tabbedPane = new JTabbedPane();
+		
+		final JPanel viewPlayers = new JPanel();
+		viewPlayers.setLayout(new GridLayout(2,0));
+		viewPlayers.add(new JScrollPane(playerList));
+		viewPlayers.add(viewPlayersBtn);
+		
+		
+		
+		JPanel viewTeams = new JPanel();
+		//viewTeams.add(viewTeamsBtn);
+		JPanel viewGames = new JPanel();
+		//viewGames.add(viewGamesBtn);
+		
+		tabbedPane.addTab("View Teams", viewTeams);
+		tabbedPane.addTab("View Player", viewPlayers);
+		tabbedPane.addTab("View Games", viewGames);
+		
+		
+		
+		tabbedPane.addChangeListener(new ChangeListener() {
+			
+		      public void stateChanged(ChangeEvent e) {
+		    	  
+		    	  if(tabbedPane.getSelectedIndex() == 1){
+		    		  loadPlayerHistory loader = new loadPlayerHistory(playerModel);
+		    		  loader.execute();
+		    	  }
+		    	  
+		    	  
+		      }
+
+		});
+
+		
+		
+		add(tabbedPane, BorderLayout.CENTER);
+		
 
 
 	}
@@ -137,8 +194,39 @@ public class BaseballBrowserMain extends JApplet {
 		pbyFrame.setVisible(true);
 		pbyFrame.pack();
 	}
+	
+	
+	public class loadPlayerHistory extends SwingWorker<Object[], Void >{
 
-
-
+		DefaultListModel dcm;
+		
+		
+		public loadPlayerHistory(DefaultListModel playerModel){
+			dcm = playerModel;
+		}
+		
+		@Override
+		protected Object[] doInBackground() throws Exception {
+			// TODO Auto-generated method stub
+			return queryPlayerHistory();
+		}
+		
+		@Override
+	    public void done() {
+	    	try {
+				Object[] playesr = get();
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    	for( Object newRow : queryPlayerHistory() ) {
+			    dcm.addElement( newRow );
+		  }
+	        
+	    }
+		
+	}
+	
 
 }
