@@ -38,6 +38,7 @@ public class BaseballBrowserMain extends JApplet {
 	 */
 	static ResultSet resultSet;
 	static JList playerList;
+	static JList teamList;
 	static Connection db2Conn;
 	static Statement st;
 	
@@ -134,6 +135,10 @@ public class BaseballBrowserMain extends JApplet {
 		final DefaultListModel playerModel = new DefaultListModel();
 		playerList.setModel(playerModel);
 		
+		teamList = new JList();
+		final DefaultListModel teamModel = new DefaultListModel();
+		teamList.setModel(teamModel);
+		
 		JButton viewPlayersBtn = new JButton("View Player Career");
 		viewPlayersBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -156,6 +161,11 @@ public class BaseballBrowserMain extends JApplet {
 		
 		
 		JPanel viewTeams = new JPanel();
+		viewTeams.setLayout(new GridLayout(2,0));
+		viewTeams.add(new JScrollPane(teamList));
+		
+		
+		
 		//viewTeams.add(viewTeamsBtn);
 		JPanel viewGames = new JPanel();
 		//viewGames.add(viewGamesBtn);
@@ -169,6 +179,11 @@ public class BaseballBrowserMain extends JApplet {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			
 		      public void stateChanged(ChangeEvent e) {
+		    	  
+		    	  if(tabbedPane.getSelectedIndex() == 0){
+		    		  loadTeamHistory loader = new loadTeamHistory(teamModel);
+		    		  loader.execute();
+		    	  }
 		    	  
 		    	  if(tabbedPane.getSelectedIndex() == 1){
 		    		  loadPlayerHistory loader = new loadPlayerHistory(playerModel);
