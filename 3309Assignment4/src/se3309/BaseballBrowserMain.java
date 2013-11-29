@@ -147,8 +147,6 @@ public class BaseballBrowserMain extends JApplet {
 			}
 		});
 
-		
-		JButton viewTeamsBtn = new JButton("View Teams");
 		JButton viewGamesBtn = new JButton("View Games");
 		
 		final JTabbedPane tabbedPane = new JTabbedPane();
@@ -156,13 +154,31 @@ public class BaseballBrowserMain extends JApplet {
 		final JPanel viewPlayers = new JPanel();
 		viewPlayers.setLayout(new GridLayout(2,0));
 		viewPlayers.add(new JScrollPane(playerList));
-		viewPlayers.add(viewPlayersBtn);
 		
 		
+		final JPanel viewPlayersButtons = new JPanel();
+		viewPlayersButtons.setLayout(new FlowLayout());
+		viewPlayersButtons.add(viewPlayersBtn);
+		
+		viewPlayers.add(viewPlayersButtons);
 		
 		JPanel viewTeams = new JPanel();
 		viewTeams.setLayout(new GridLayout(2,0));
 		viewTeams.add(new JScrollPane(teamList));
+		
+		JButton viewTeamsBtn = new JButton("View Team History");
+		viewTeamsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
+
+			}
+		});
+		
+		final JPanel viewTeamsButtons = new JPanel();
+		viewTeamsButtons.setLayout(new FlowLayout());
+		viewTeamsButtons.add(viewTeamsBtn);
+		
+		viewTeams.add(viewTeamsButtons);
 		
 		
 		
@@ -234,6 +250,49 @@ public class BaseballBrowserMain extends JApplet {
 		//resultSet.
 		JFrame pbyFrame = new JFrame();
 		pbyFrame.setTitle(playerName+" Info");
+		pbyFrame.setLayout(new GridLayout(0,1));
+		
+		for (int i=0; i<info.size(); i++) {
+			pbyFrame.add(info.get(i));
+		}
+		pbyFrame.setVisible(true);
+		pbyFrame.pack();
+	}
+	
+	public static void queryTeamByYear(String teamName) {
+		String text="";
+		ArrayList<JLabel> info = new ArrayList<JLabel>();
+		try
+		{
+			// use a statement to gather data from the database
+			st = db2Conn.createStatement();
+			String myQuery = "SELECT * FROM TeamByYear WHERE teamName = '"+teamName+"'";   		//BOOK is a table name
+			resultSet = st.executeQuery(myQuery); 		 // execute the query         
+			while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
+			{
+				String year = resultSet.getString("year");
+				String wins = resultSet.getString("wins");
+				String losses = resultSet.getString("losses");
+				String location = resultSet.getString("location");
+				String manager = resultSet.getString("manager");
+				String payroll = resultSet.getString("payroll");
+				String profit = resultSet.getString("profit");
+				String owner = resultSet.getString("owner");
+				text="In "+year+", Wins: "+wins+" , Losses: "+losses+", Location: "+location+" Manager: "+manager+" Payroll: " + payroll + " Profit: " + profit + " Owner: " + owner + "\n";
+				info.add(new JLabel(text));
+			}
+
+			// clean up resources
+			resultSet.close();
+			st.close();
+		}
+		catch (SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
+		//resultSet.
+		JFrame pbyFrame = new JFrame();
+		pbyFrame.setTitle(teamName+" Info");
 		pbyFrame.setLayout(new GridLayout(0,1));
 		
 		for (int i=0; i<info.size(); i++) {
