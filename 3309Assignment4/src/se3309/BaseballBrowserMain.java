@@ -8,7 +8,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
@@ -76,6 +78,7 @@ public class BaseballBrowserMain extends JApplet {
 	
 	JLabel odds1 = new JLabel("Odds1");
 	JLabel odds2 = new JLabel("Odds2");
+	
 	
 	DefaultComboBoxModel teamsList = new DefaultComboBoxModel();
 
@@ -472,8 +475,8 @@ public class BaseballBrowserMain extends JApplet {
 				
 				stats1.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
 				
-				odds1.setText(team1odds + "% Odds");
-				odds2.setText(team2odds + "% Odds");
+				odds1.setText(new DecimalFormat("#.##").format(team1odds) + "% Odds");
+				odds2.setText(new DecimalFormat("#.##").format(team2odds) + "% Odds");
 
 			}
 		});
@@ -502,8 +505,8 @@ public class BaseballBrowserMain extends JApplet {
 				
 				stats2.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
 				
-				odds1.setText(team1odds + "% Odds");
-				odds2.setText(team2odds + "% Odds");
+				odds1.setText(new DecimalFormat("#.##").format(team1odds) + "% Odds");
+				odds2.setText(new DecimalFormat("#.##").format(team2odds) + "% Odds");
 				
 			}
 		});
@@ -548,12 +551,64 @@ public class BaseballBrowserMain extends JApplet {
 		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		JLabel location = new JLabel("Location: ");
-		JTextField locationField = new JTextField();
-		locationField.setPreferredSize(new Dimension(100, 20));
 		JButton playGame = new JButton("Simulate Game");
-		buttons.add(location);
-		buttons.add(locationField);
+		
+		
+		
+		playGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				
+				if(team1.getSelectedItem().toString().equals(team2.getSelectedItem().toString())){
+					JOptionPane.showMessageDialog(null, "A team can't play itself!");
+					return;
+				}
+				
+				double sumWeight = team1Weight + team2Weight;
+				
+				double random = Math.random() * sumWeight;
+				
+				double[] teamWeights = new double[2];
+				
+				teamWeights[0] = team1Weight;
+				teamWeights[1] = team2Weight;
+				
+				int winner = -1;
+				
+				for(int i=0; i < 1; i++) {
+					  if(random < teamWeights[i]){
+					    winner = i;
+					    break;
+					  }
+					  random -= teamWeights[i];
+				}
+				
+				//team1 Wins
+				if(winner == 0)
+				{
+					String winScore = new DecimalFormat("#").format(10 + (Math.random() * (17 - 10)));
+					String loseScore = new DecimalFormat("#").format( 0 + (Math.random() * (9 - 0)));
+					
+					newGame(team1.getSelectedItem().toString(), team2.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20),  winScore, loseScore);
+					
+					JOptionPane.showMessageDialog(null, team1.getSelectedItem().toString() +"(" + winScore + ") Won vs " + team2.getSelectedItem().toString() + "(" + loseScore + ")");
+				}
+				
+				//team2 wins
+				else{
+					
+					String winScore = new DecimalFormat("#").format(10 + (Math.random() * (17 - 10)));
+					String loseScore = new DecimalFormat("#").format( 0 + (Math.random() * (9 - 0)));
+					
+					newGame(team2.getSelectedItem().toString(), team1.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20), winScore, loseScore);
+					
+					JOptionPane.showMessageDialog(null, team2.getSelectedItem().toString() +"(" + winScore + ") Won vs " + team1.getSelectedItem().toString() + "(" + loseScore + ")");
+					
+				}
+				
+				
+			}
+		});
+		
 		buttons.add(playGame);
 		
 		playGamesTab.add(listPanel);
@@ -564,6 +619,7 @@ public class BaseballBrowserMain extends JApplet {
 		return playGamesTab;
 		
 	}
+
 	
 	public JPanel createTradeTab(){
 		return new JPanel();
@@ -603,8 +659,6 @@ public class BaseballBrowserMain extends JApplet {
 					loadGames loader = new loadGames(gameModel,"*");
 					loader.execute();
 					loadGames = false;
-
-
 				}
 
 			}
@@ -622,6 +676,38 @@ public class BaseballBrowserMain extends JApplet {
 
 
 
+	}
+	
+	public void newGame(String winner, String loser, String year, String date, String location, String winScore, String loseScore){
+		
+		// use a statement to gather data from the database
+		try {
+			st = db2Conn.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String myQuery = "INSERT INTO GAME VALUES('" + winner + "','" + loser + "'," + year + ",'" + date + "','" + location + "'," + winScore + "," + loseScore + ")" ; 
+		
+		System.out.println(myQuery);
+		
+		try {
+			st.execute(myQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			st.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		loadGames = true;
+		
 	}
 
 	public static void queryPlayerByYear(String playerName) {
@@ -826,6 +912,19 @@ public class BaseballBrowserMain extends JApplet {
 
 	}
 
+	public static String generateString(int length)
+	{
+		String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		Random rng = new Random();
+		
+	    char[] text = new char[length];
+	    for (int i = 0; i < length; i++)
+	    {
+	        text[i] = characters.charAt(rng.nextInt(characters.length()));
+	    }
+	    return new String(text);
+	}
 
 
 }
