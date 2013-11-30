@@ -39,6 +39,11 @@ public class BaseballBrowserMain extends JApplet {
 	/**
 	 * @param args
 	 */
+
+	DefaultListModel teamModel;
+	DefaultListModel playerModel;
+	DefaultListModel gameModel;
+
 	static ResultSet resultSet;
 	static JLabel playerDetail;
 	static JList playerList;
@@ -158,15 +163,15 @@ public class BaseballBrowserMain extends JApplet {
 
 			// use a statement to gather data from the database
 			st = db2Conn.createStatement();
-			
+
 			String myQuery;
-			
+
 			if(team.equals("*"))
 				myQuery = "SELECT * FROM Game";
 			else
 				myQuery = "SELECT * FROM Game WHERE winningTeamName='" + team + "' OR losingTeamName='" + team + "'";      		//BOOK is a table name
-			
-			
+
+
 			resultSet = st.executeQuery(myQuery); 		 // execute the query         
 			while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
 			{
@@ -192,7 +197,7 @@ public class BaseballBrowserMain extends JApplet {
 
 		return  games.toArray();
 	}
-	
+
 	public void init() {
 
 		//Open the DB2 connection
@@ -214,56 +219,14 @@ public class BaseballBrowserMain extends JApplet {
 		createGUI();
 	}
 
-	private void createGUI() {
+	public JPanel createViewTeamsTab(){
 
 		final JTextField yearField = new JTextField("2013");
 
-		//THE LISTS
-		playerList = new JList();
-		final DefaultListModel playerModel = new DefaultListModel();
-		playerList.setModel(playerModel);
-		
-		gameList = new JList();
-		final DefaultListModel gameModel = new DefaultListModel();
-		gameList.setModel(gameModel);
-
-		teamPlayerList = new JList();
-		final DefaultListModel teamPlayerModel = new DefaultListModel();
-		teamPlayerList.setModel(playerModel);
-
 		teamList = new JList();
-		final DefaultListModel teamModel = new DefaultListModel();
+
+		teamModel = new DefaultListModel();
 		teamList.setModel(teamModel);
-
-
-		//For viewing player careers
-		playerList.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				// TODO Auto-generated method stub
-				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
-			}
-		});
-
-		JButton viewGamesBtn = new JButton("View Games");
-
-
-		//Sets up the tabbed pane
-		final JTabbedPane tabbedPane = new JTabbedPane();
-
-		final JPanel viewPlayers = new JPanel();
-		viewPlayers.setLayout(new GridLayout(2,0));
-		viewPlayers.add(new JScrollPane(playerList));
-
-		JPanel playerGrid = new JPanel();
-		playerGrid.setLayout(new GridLayout(3,0));
-
-
-		playerDetail = new JLabel();
-
-		playerGrid.add(playerDetail);
-
-		viewPlayers.add(playerGrid);
 
 		JPanel viewTeams = new JPanel();
 		viewTeams.setLayout(new GridLayout(2,0));
@@ -360,16 +323,69 @@ public class BaseballBrowserMain extends JApplet {
 
 		viewTeams.add(teamsLowerPanel);
 
+		return viewTeams;
+
+	}
+
+	public JPanel createViewPlayersTab(){
+
+		playerList = new JList();
+		playerModel = new DefaultListModel();
+		playerList.setModel(playerModel);
+
+		teamPlayerList = new JList();
+		final DefaultListModel teamPlayerModel = new DefaultListModel();
+		teamPlayerList.setModel(playerModel);
+
+		//For viewing player careers
+		playerList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
+			}
+		});
+		
+		final JPanel viewPlayers = new JPanel();
+		viewPlayers.setLayout(new GridLayout(2,0));
+		viewPlayers.add(new JScrollPane(playerList));
+
+		JPanel playerGrid = new JPanel();
+		playerGrid.setLayout(new GridLayout(3,0));
 
 
+		playerDetail = new JLabel();
+
+		playerGrid.add(playerDetail);
+
+		viewPlayers.add(playerGrid);
+		
+		return viewPlayers;
+
+	}
+
+	public JPanel createViewGamesTab(){
+		
+		gameList = new JList();
+		gameModel = new DefaultListModel();
+		gameList.setModel(gameModel);
+		
 		JPanel viewGames = new JPanel();
 		viewGames.setLayout(new GridLayout(2,0));
 		viewGames.add(new JScrollPane(gameList));
+		
+		return viewGames;
+	}
+	
+	private void createGUI() {
+
+		//Sets up the tabbed pane
+		final JTabbedPane tabbedPane = new JTabbedPane();
 
 
-		tabbedPane.addTab("View Teams", viewTeams);
-		tabbedPane.addTab("View Player", viewPlayers);
-		tabbedPane.addTab("View Games", viewGames);
+		tabbedPane.addTab("View Teams", createViewTeamsTab());
+		tabbedPane.addTab("View Player", createViewPlayersTab());
+		tabbedPane.addTab("View Games", createViewGamesTab());
 
 
 
@@ -538,72 +554,72 @@ public class BaseballBrowserMain extends JApplet {
 	public class loadTeamHistory extends SwingWorker<Object[], Void >{
 
 		DefaultListModel dcm;
-		
-		
+
+
 		public loadTeamHistory(DefaultListModel teamModel){
 			dcm = teamModel;
 		}
-		
+
 		@Override
 		protected Object[] doInBackground() throws Exception {
 			// TODO Auto-generated method stub
 			return queryTeamHistory();
 		}
-		
+
 		@Override
-	    public void done() {
-	    	try {
+		public void done() {
+			try {
 				Object[] teams = get();
-				
+
 				for( Object newRow : teams ) {
-				    dcm.addElement( newRow );
+					dcm.addElement( newRow );
 				}
-				
+
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    	
-	    	
-	        
-	    }
-		
+
+
+
+		}
+
 	}
-	
+
 	public class loadGames extends SwingWorker<Object[], Void>{
 
 		DefaultListModel dcm;
 		String team;
-		
+
 		public loadGames(DefaultListModel teamModel, String _team){
 			dcm = teamModel;
 			team = _team;
 		}
-		
+
 		@Override
 		protected Object[] doInBackground() throws Exception {
 			// TODO Auto-generated method stub
 			return queryGames(team);
 		}
-		
+
 		@Override
-	    public void done() {
-	    	try {
+		public void done() {
+			try {
 				Object[] teams = get();
-				
+
 				for( Object newRow : teams ) {
-				    dcm.addElement( newRow );
+					dcm.addElement( newRow );
 				}
-				
+
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    	
-	    	
-	        
-	    }
-		
+
+
+
+		}
+
 	}
 
 
