@@ -43,6 +43,19 @@ public class BaseballBrowserMain extends JApplet {
 	
 	int team1Wins;
 	int team2Wins;
+	int team1Losses;
+	int team2Losses;
+	String team1Text;
+	String team2Text;
+	
+	double team1Weight;
+	double team2Weight;
+	double team1odds;
+	double team2odds;
+	
+	final JComboBox team1 = new JComboBox();
+	final JComboBox team2 = new JComboBox();
+	
 
 	DefaultComboBoxModel teamModel;
 	DefaultListModel playerModel;
@@ -60,6 +73,9 @@ public class BaseballBrowserMain extends JApplet {
 	static JList gameList;
 	static Connection db2Conn;
 	static Statement st;
+	
+	JLabel odds1 = new JLabel("Odds1");
+	JLabel odds2 = new JLabel("Odds2");
 	
 	DefaultComboBoxModel teamsList = new DefaultComboBoxModel();
 
@@ -430,7 +446,7 @@ public class BaseballBrowserMain extends JApplet {
 		
 		
 		
-		final JComboBox team1 = new JComboBox();
+		
 		team1.setModel(playingTeamList1);
 		
 		final JLabel stats1 = new JLabel();
@@ -442,16 +458,27 @@ public class BaseballBrowserMain extends JApplet {
 				int index = team1.getSelectedIndex();
 				String text = (String) teamModel.getElementAt(index);
 				String wins = (text.split("Total Wins:")[1]).split(",")[0];
-				String losses = (text.split("Total Losses:")[1]).split(",")[0];
+				String losses = (text.split("Total Losses: ")[1]).split(",")[0];
 				team1Wins = Integer.parseInt(wins);
+				team1Losses = Integer.parseInt(losses);
+				
+				
+				double sum = team1Wins + team1Losses;
+				
+				team1Weight = (team1Wins / sum) * 100;
+				
+				team1odds = team1Weight / (team1Weight + team2Weight) * 100;
+				team2odds = team2Weight / (team1Weight + team2Weight) * 100;
+				
 				stats1.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
+				
+				odds1.setText(team1odds + "% Odds");
+				odds2.setText(team2odds + "% Odds");
 
 			}
 		});
 		
 		
-		
-		final JComboBox team2 = new JComboBox();
 		team2.setModel(playingTeamList2);
 		
 		team2.addActionListener (new ActionListener () {
@@ -460,12 +487,27 @@ public class BaseballBrowserMain extends JApplet {
 				int index = team2.getSelectedIndex();
 				String text = (String) teamModel.getElementAt(index);
 				String wins = (text.split("Total Wins:")[1]).split(",")[0];
-				String losses = (text.split("Total Losses:")[1]).split(",")[0];
+				String losses = (text.split("Total Losses: ")[1]).split(",")[0];
 				team2Wins = Integer.parseInt(wins);
+				team2Losses = Integer.parseInt(losses);
+				
+				//team2Weight = (team2Wins / (team2Wins + team2Losses)) * 100;
+				
+				double sum = team2Wins + team2Losses;
+				
+				team2Weight = (team2Wins / sum) * 100;
+				
+				team1odds = team1Weight / (team1Weight + team2Weight) * 100;
+				team2odds = team2Weight / (team1Weight + team2Weight) * 100;
+				
 				stats2.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
-
+				
+				odds1.setText(team1odds + "% Odds");
+				odds2.setText(team2odds + "% Odds");
+				
 			}
 		});
+		
 		
 		JLabel versus = new JLabel(" VS ");
 		
@@ -474,10 +516,35 @@ public class BaseballBrowserMain extends JApplet {
 		listPanel.add(team2);
 		
 		JPanel stats = new JPanel();
-		stats.setLayout(new GridLayout(0,2));
+		stats.setLayout(new GridLayout(2,2));
 		
-		stats.add(stats1);
-		stats.add(stats2);
+		
+		JPanel flowStats1 = new JPanel();
+		flowStats1.setLayout(new FlowLayout());
+		
+		flowStats1.add(stats1);
+		
+		JPanel flowStats2 = new JPanel();
+		flowStats2.setLayout(new FlowLayout());
+		
+		flowStats2.add(stats2);
+		
+		
+		
+		JPanel odds1Flow = new JPanel();
+		odds1Flow.setLayout(new FlowLayout());
+		odds1Flow.add(odds1);
+		
+		
+		JPanel odds2Flow = new JPanel();
+		odds2Flow.setLayout(new FlowLayout());
+		odds2Flow.add(odds2);
+		
+		stats.add(flowStats1);
+		
+		stats.add(flowStats2);
+		stats.add(odds1Flow);
+		stats.add(odds2Flow);
 		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
