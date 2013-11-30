@@ -31,6 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 public class BaseballBrowserMain extends JApplet {
 
@@ -38,19 +40,25 @@ public class BaseballBrowserMain extends JApplet {
 	 * @param args
 	 */
 	static ResultSet resultSet;
+	static JLabel playerDetail;
 	static JList playerList;
 	static JList teamPlayerList;
 	static JList teamList;
+	static JList gameList;
 	static Connection db2Conn;
 	static Statement st;
-	
-	
+
+	boolean loadTeams = true;
+	boolean loadPlayers = true;
+	boolean loadGames = true;
+
+
 	public static Object[] queryPlayerHistory() {
 		ArrayList<String> playerHistories = new ArrayList<String>();
 		try
 		{
 			String text="";
-			
+
 			// use a statement to gather data from the database
 			st = db2Conn.createStatement();
 			String myQuery = "SELECT * FROM PlayerHistory ORDER BY PlayerName";   		//BOOK is a table name
@@ -73,16 +81,16 @@ public class BaseballBrowserMain extends JApplet {
 		{
 			sqle.printStackTrace();
 		}
-		
+
 		return  playerHistories.toArray();
 	}
-	
+
 	public static Object[] queryTeamHistory() {
 		ArrayList<String> teamHistories = new ArrayList<String>();
 		try
 		{
 			String text="";
-			
+
 			// use a statement to gather data from the database
 			st = db2Conn.createStatement();
 			String myQuery = "SELECT * FROM TeamHistory ORDER BY TeamName";   		//BOOK is a table name
@@ -105,16 +113,16 @@ public class BaseballBrowserMain extends JApplet {
 		{
 			sqle.printStackTrace();
 		}
-		
+
 		return  teamHistories.toArray();
 	}
-	
+
 	public static Object[] queryTeamPlayers(String team, String year){
 		ArrayList<String> players = new ArrayList<String>();
 		try
 		{
 			String text="";
-			
+
 			// use a statement to gather data from the database
 			st = db2Conn.createStatement();
 			String myQuery = "SELECT * FROM Contract WHERE teamName='" + team + "' AND YEAR=" + year;   		//BOOK is a table name
@@ -137,79 +145,130 @@ public class BaseballBrowserMain extends JApplet {
 		{
 			sqle.printStackTrace();
 		}
-		
+
 		return  players.toArray();
+	}
+
+	public Object[] queryGames(String team) {
+		// TODO Auto-generated method stub
+		ArrayList<String> games = new ArrayList<String>();
+		try
+		{
+			String text="";
+
+			// use a statement to gather data from the database
+			st = db2Conn.createStatement();
+			
+			String myQuery;
+			
+			if(team.equals("*"))
+				myQuery = "SELECT * FROM Game";
+			else
+				myQuery = "SELECT * FROM Game WHERE winningTeamName='" + team + "' OR losingTeamName='" + team + "'";      		//BOOK is a table name
+			
+			
+			resultSet = st.executeQuery(myQuery); 		 // execute the query         
+			while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
+			{
+				String winner = resultSet.getString("winningTeamName"); 	//These are column names
+				String loser = resultSet.getString("losingTeamName"); 		//These are column names
+				String year = resultSet.getString("year"); 		//These are column names
+				String date = resultSet.getString("date");
+				String location = resultSet.getString("location");
+				String winScore = resultSet.getString("winningTeamScore");
+				String loseScore = resultSet.getString("losingTeamScore");
+				text=(winner+" ("+winScore+") vs " + loser + "(" + loseScore + ") " + date  + " at " + location);
+				games.add(text);
+			}
+
+			// clean up resources
+			resultSet.close();
+			st.close();
+		}
+		catch (SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
+
+		return  games.toArray();
 	}
 	
 	public void init() {
-		
+
 		//Open the DB2 connection
 		try {
 			Class.forName("com.ibm.db2.jcc.DB2Driver"); 	 // load the DB2 Driver
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} 	
-		
+
 		try {
 			db2Conn = DriverManager.getConnection	
 					("jdbc:db2://ebitdb2.eng.uwo.ca:50000/SE3309","nward24","nicholas"); // establish a connection to DB2
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		//Start the GUI
 		setSize(500, 500);
 		createGUI();
 	}
 
 	private void createGUI() {
-		
+
 		final JTextField yearField = new JTextField("2013");
-		
+
 		//THE LISTS
 		playerList = new JList();
 		final DefaultListModel playerModel = new DefaultListModel();
 		playerList.setModel(playerModel);
 		
+		gameList = new JList();
+		final DefaultListModel gameModel = new DefaultListModel();
+		gameList.setModel(gameModel);
+
 		teamPlayerList = new JList();
 		final DefaultListModel teamPlayerModel = new DefaultListModel();
 		teamPlayerList.setModel(playerModel);
-		
+
 		teamList = new JList();
 		final DefaultListModel teamModel = new DefaultListModel();
 		teamList.setModel(teamModel);
-		
-		
-		//For viewing player careers
-		JButton viewPlayersBtn = new JButton("View Player Career");
-		viewPlayersBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
 
+
+		//For viewing player careers
+		playerList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
 			}
 		});
 
 		JButton viewGamesBtn = new JButton("View Games");
-		
-		
+
+
 		//Sets up the tabbed pane
 		final JTabbedPane tabbedPane = new JTabbedPane();
-		
+
 		final JPanel viewPlayers = new JPanel();
 		viewPlayers.setLayout(new GridLayout(2,0));
 		viewPlayers.add(new JScrollPane(playerList));
-		
-		
-		final JPanel viewPlayersButtons = new JPanel();
-		viewPlayersButtons.setLayout(new FlowLayout());
-		viewPlayersButtons.add(viewPlayersBtn);
-		
-		viewPlayers.add(viewPlayersButtons);
-		
+
+		JPanel playerGrid = new JPanel();
+		playerGrid.setLayout(new GridLayout(3,0));
+
+
+		playerDetail = new JLabel();
+
+		playerGrid.add(playerDetail);
+
+		viewPlayers.add(playerGrid);
+
 		JPanel viewTeams = new JPanel();
 		viewTeams.setLayout(new GridLayout(2,0));
 		viewTeams.add(new JScrollPane(teamList));
-		
+
 		JButton viewTeamsBtn = new JButton("View Team History");
 		viewTeamsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -217,134 +276,143 @@ public class BaseballBrowserMain extends JApplet {
 
 			}
 		});
-		
+
 		final JList teamPlayers = new JList();
 		final DefaultListModel teamPlayersModel = new DefaultListModel();
-		
+
 		teamPlayers.setModel(teamPlayersModel);
-		
-		JButton viewTeamPlayersBtn = new JButton("View Team Players");
-		viewTeamPlayersBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				
+
+		teamList.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+
 				teamPlayersModel.clear();
-				
+
 				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
 				String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
-				
+
 				for(Object player: queryTeamPlayers(team,"2013")){
 					teamPlayersModel.addElement(player);
 				}
-				
+
 				yearField.setText("2013");
-				
-				
 
 			}
 		});
-		
-		
-		
+
+
+
 		final JPanel teamsLowerPanel = new JPanel();
 		teamsLowerPanel.setLayout(new GridLayout(2,0));
-		
+
 		JPanel teamsButtonPanel = new JPanel();
 		teamsButtonPanel.setLayout(new GridLayout(3,0));
-		
+
 		JPanel flowButtons = new JPanel();
 		flowButtons.setLayout(new FlowLayout());
-		
+
 		flowButtons.add(viewTeamsBtn);
-		flowButtons.add(viewTeamPlayersBtn);
-		
+
 		teamsButtonPanel.add(flowButtons);
-		
-		
-		
+
+
+
 		JPanel spacer = new JPanel();
-		
+
 		teamsButtonPanel.add(spacer);
-		
+
 		JLabel yearLabel = new JLabel("Players during: ");
-		
-		
+
+
 		yearField.setPreferredSize( new Dimension( 100, 24 ) );
-		
+
 		JButton setYearBtn = new JButton("Change Year");
 		setYearBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				
+
 				teamPlayersModel.clear();
-				
+
 				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
 				String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
-				
+
 				for(Object player: queryTeamPlayers(team, yearField.getText())){
 					teamPlayersModel.addElement(player);
 				}
 
 			}
 		});
-		
+
 		JPanel yearPanel = new JPanel();
 		yearPanel.setLayout(new FlowLayout());
 		yearPanel.add(yearLabel);
 		yearPanel.add(yearField);
 		yearPanel.add(setYearBtn);
-		
-		
+
+
 		teamsButtonPanel.add(yearPanel);
-		
+
 		teamsLowerPanel.add(teamsButtonPanel);
 		teamsLowerPanel.add(new JScrollPane(teamPlayers));
-		
-		
-		
+
+
+
 		viewTeams.add(teamsLowerPanel);
-		
-		
-		
+
+
+
 		JPanel viewGames = new JPanel();
-		
-		
+		viewGames.setLayout(new GridLayout(2,0));
+		viewGames.add(new JScrollPane(gameList));
+
+
 		tabbedPane.addTab("View Teams", viewTeams);
 		tabbedPane.addTab("View Player", viewPlayers);
 		tabbedPane.addTab("View Games", viewGames);
-		
-		
-		
+
+
+
 		tabbedPane.addChangeListener(new ChangeListener() {
-			
-		      public void stateChanged(ChangeEvent e) {
-		    	  
-		    	  
-		    	  if(tabbedPane.getSelectedIndex() == 0){
-		    		  loadTeamHistory loader = new loadTeamHistory(teamModel);
-		    		  loader.execute();
-		    	  }
-		    	  
-		    	  if(tabbedPane.getSelectedIndex() == 1){
-		    		  loadPlayerHistory loader = new loadPlayerHistory(playerModel);
-		    		  loader.execute();
-		    	  }
-		    	  
-		      }
+
+			public void stateChanged(ChangeEvent e) {
+
+
+				if(tabbedPane.getSelectedIndex() == 0 && loadTeams){
+					loadTeamHistory loader = new loadTeamHistory(teamModel);
+					loader.execute();
+					loadTeams = false;
+				}
+				else if(tabbedPane.getSelectedIndex() == 1 && loadPlayers){
+					loadPlayerHistory loader = new loadPlayerHistory(playerModel);
+					loader.execute();
+					loadPlayers = false;
+				}
+				else if(tabbedPane.getSelectedIndex() == 2 && loadGames){
+					loadGames loader = new loadGames(gameModel,"*");
+					loader.execute();
+					loadGames = false;
+				}
+
+			}
 
 		});
 
-		
-		
+
+
 		add(tabbedPane, BorderLayout.CENTER);
-		
+
 		loadTeamHistory loader = new loadTeamHistory(teamModel);
 		loader.execute();
-		
+
+		loadTeams = false;
+
 
 
 	}
 
 	public static void queryPlayerByYear(String playerName) {
-		String text="";
+		String text="<html><body>";
 		ArrayList<JLabel> info = new ArrayList<JLabel>();
 		try
 		{
@@ -359,9 +427,10 @@ public class BaseballBrowserMain extends JApplet {
 				String ba = resultSet.getString("BattingAverage");
 				String era = resultSet.getString("EarnedRunAverage");
 				String war = resultSet.getString("WinsAboveReplacement");
-				text="In "+year+", played "+position+" , batted "+ba+", with a "+era+" ERA and "+war+" WAR.\n";
-				info.add(new JLabel(text));
+				text+="In "+year+", played "+position+" , batted "+ba+", with a "+era+" ERA and "+war+" WAR.<br>";
 			}
+
+			text+="</body></html>";
 
 			// clean up resources
 			resultSet.close();
@@ -372,17 +441,13 @@ public class BaseballBrowserMain extends JApplet {
 			sqle.printStackTrace();
 		}
 		//resultSet.
-		JFrame pbyFrame = new JFrame();
-		pbyFrame.setTitle(playerName+" Info");
-		pbyFrame.setLayout(new GridLayout(0,1));
-		
-		for (int i=0; i<info.size(); i++) {
-			pbyFrame.add(info.get(i));
-		}
-		pbyFrame.setVisible(true);
-		pbyFrame.pack();
+
+
+
+		playerDetail.setText(text);
+
 	}
-	
+
 	public static void queryTeamByYear(String teamName) {
 		String text="";
 		ArrayList<String> info = new ArrayList<String>();
@@ -418,56 +483,56 @@ public class BaseballBrowserMain extends JApplet {
 		JFrame pbyFrame = new JFrame();
 		pbyFrame.setTitle(teamName+" Info");
 		pbyFrame.setLayout(new GridLayout(0,1));
-		
+
 		JList years = new JList();
 		DefaultListModel yearModel = new DefaultListModel();
-		
+
 		for (String year : info) {
 			yearModel.addElement(year);
 		}
-		
+
 		years.setModel(yearModel);
-		
+
 		pbyFrame.add(new JScrollPane(years));
-		
+
 		pbyFrame.setVisible(true);
 		pbyFrame.pack();
 	}
-	
-	
+
+
 	public class loadPlayerHistory extends SwingWorker<Object[], Void >{
 
 		DefaultListModel dcm;
-		
-		
+
+
 		public loadPlayerHistory(DefaultListModel playerModel){
 			dcm = playerModel;
 		}
-		
+
 		@Override
 		protected Object[] doInBackground() throws Exception {
 			// TODO Auto-generated method stub
 			return queryPlayerHistory();
 		}
-		
+
 		@Override
-	    public void done() {
-	    	try {
+		public void done() {
+			try {
 				Object[] players = get();
-				
+
 				for( Object newRow : players ) {
-				    dcm.addElement( newRow );
+					dcm.addElement( newRow );
 				}
-				
+
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    	
-	    	
-	        
-	    }
-		
+
+
+
+		}
+
 	}
 
 	public class loadTeamHistory extends SwingWorker<Object[], Void >{
@@ -504,5 +569,43 @@ public class BaseballBrowserMain extends JApplet {
 	    }
 		
 	}
+	
+	public class loadGames extends SwingWorker<Object[], Void>{
+
+		DefaultListModel dcm;
+		String team;
+		
+		public loadGames(DefaultListModel teamModel, String _team){
+			dcm = teamModel;
+			team = _team;
+		}
+		
+		@Override
+		protected Object[] doInBackground() throws Exception {
+			// TODO Auto-generated method stub
+			return queryGames(team);
+		}
+		
+		@Override
+	    public void done() {
+	    	try {
+				Object[] teams = get();
+				
+				for( Object newRow : teams ) {
+				    dcm.addElement( newRow );
+				}
+				
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    	
+	        
+	    }
+		
+	}
+
+
 
 }
