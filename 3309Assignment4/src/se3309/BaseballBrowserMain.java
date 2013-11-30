@@ -498,6 +498,10 @@ public class BaseballBrowserMain extends JApplet {
 		
 	}
 	
+	public JPanel createTradeTab(){
+		return new JPanel();
+	}
+	
 	private void createGUI() {
 
 
@@ -509,6 +513,7 @@ public class BaseballBrowserMain extends JApplet {
 		tabbedPane.addTab("View Players", createViewPlayersTab());
 		tabbedPane.addTab("View Games", createViewGamesTab());
 		tabbedPane.addTab("Play Games!", createPlayGamesTab());
+		tabbedPane.addTab("Trade Players!", createTradeTab());
 
 
 
