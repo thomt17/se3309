@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JApplet;
@@ -39,10 +40,17 @@ public class BaseballBrowserMain extends JApplet {
 	/**
 	 * @param args
 	 */
+	
+	int team1Wins;
+	int team2Wins;
 
-	DefaultListModel teamModel;
+	DefaultComboBoxModel teamModel;
 	DefaultListModel playerModel;
 	DefaultListModel gameModel;
+	DefaultComboBoxModel filterModel;
+	
+	DefaultComboBoxModel playingTeamList1 = new DefaultComboBoxModel();
+	DefaultComboBoxModel playingTeamList2 = new DefaultComboBoxModel();
 
 	static ResultSet resultSet;
 	static JLabel playerDetail;
@@ -52,11 +60,14 @@ public class BaseballBrowserMain extends JApplet {
 	static JList gameList;
 	static Connection db2Conn;
 	static Statement st;
+	
+	DefaultComboBoxModel teamsList = new DefaultComboBoxModel();
+
+
 
 	boolean loadTeams = true;
 	boolean loadPlayers = true;
 	boolean loadGames = true;
-
 
 	public static Object[] queryPlayerHistory() {
 		ArrayList<String> playerHistories = new ArrayList<String>();
@@ -215,7 +226,6 @@ public class BaseballBrowserMain extends JApplet {
 		}
 
 		//Start the GUI
-		setSize(500, 500);
 		createGUI();
 	}
 
@@ -225,7 +235,7 @@ public class BaseballBrowserMain extends JApplet {
 
 		teamList = new JList();
 
-		teamModel = new DefaultListModel();
+		teamModel = new DefaultComboBoxModel();
 		teamList.setModel(teamModel);
 
 		JPanel viewTeams = new JPanel();
@@ -345,7 +355,7 @@ public class BaseballBrowserMain extends JApplet {
 				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
 			}
 		});
-		
+
 		final JPanel viewPlayers = new JPanel();
 		viewPlayers.setLayout(new GridLayout(2,0));
 		viewPlayers.add(new JScrollPane(playerList));
@@ -359,33 +369,146 @@ public class BaseballBrowserMain extends JApplet {
 		playerGrid.add(playerDetail);
 
 		viewPlayers.add(playerGrid);
-		
+
 		return viewPlayers;
 
 	}
 
 	public JPanel createViewGamesTab(){
-		
+
 		gameList = new JList();
 		gameModel = new DefaultListModel();
 		gameList.setModel(gameModel);
-		
+
 		JPanel viewGames = new JPanel();
 		viewGames.setLayout(new GridLayout(2,0));
 		viewGames.add(new JScrollPane(gameList));
-		
+
+		JPanel flowPanel = new JPanel();
+		flowPanel.setLayout(new FlowLayout());
+
+		final JComboBox teamFilter = new JComboBox();
+		filterModel = new DefaultComboBoxModel();
+
+		JLabel filterLabel = new JLabel("Team Filter: ");
+
+		teamFilter.setModel(filterModel);
+		filterModel.addElement("<None>");
+
+		teamFilter.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+
+				if(((String) teamFilter.getSelectedItem()).equals("<None>")){
+					loadGames loader = new loadGames(gameModel,"*");
+					loader.execute();
+					return;
+				}
+
+				gameModel.clear();
+				String team = ((String) teamFilter.getSelectedItem()).split(" Total")[0];
+				loadGames loader = new loadGames(gameModel,team);
+				loader.execute();
+
+			}
+		});
+
+		flowPanel.add(filterLabel);
+		flowPanel.add(teamFilter);
+
+		viewGames.add(flowPanel);
+
 		return viewGames;
+	}
+
+	public JPanel createPlayGamesTab(){
+		
+		JPanel playGamesTab = new JPanel();
+		playGamesTab.setLayout(new GridLayout(3,0));
+		
+		JPanel listPanel = new JPanel();
+		listPanel.setLayout(new FlowLayout());
+		
+		
+		
+		final JComboBox team1 = new JComboBox();
+		team1.setModel(playingTeamList1);
+		
+		final JLabel stats1 = new JLabel();
+		final JLabel stats2 = new JLabel();
+		
+		team1.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+
+				int index = team1.getSelectedIndex();
+				String text = (String) teamModel.getElementAt(index);
+				String wins = (text.split("Total Wins:")[1]).split(",")[0];
+				String losses = (text.split("Total Losses:")[1]).split(",")[0];
+				team1Wins = Integer.parseInt(wins);
+				stats1.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
+
+			}
+		});
+		
+		
+		
+		final JComboBox team2 = new JComboBox();
+		team2.setModel(playingTeamList2);
+		
+		team2.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+
+				int index = team2.getSelectedIndex();
+				String text = (String) teamModel.getElementAt(index);
+				String wins = (text.split("Total Wins:")[1]).split(",")[0];
+				String losses = (text.split("Total Losses:")[1]).split(",")[0];
+				team2Wins = Integer.parseInt(wins);
+				stats2.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
+
+			}
+		});
+		
+		JLabel versus = new JLabel(" VS ");
+		
+		listPanel.add(team1);
+		listPanel.add(versus);
+		listPanel.add(team2);
+		
+		JPanel stats = new JPanel();
+		stats.setLayout(new GridLayout(0,2));
+		
+		stats.add(stats1);
+		stats.add(stats2);
+		
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new FlowLayout());
+		JLabel location = new JLabel("Location: ");
+		JTextField locationField = new JTextField();
+		locationField.setPreferredSize(new Dimension(100, 20));
+		JButton playGame = new JButton("Simulate Game");
+		buttons.add(location);
+		buttons.add(locationField);
+		buttons.add(playGame);
+		
+		playGamesTab.add(listPanel);
+		playGamesTab.add(stats);
+		playGamesTab.add(buttons);
+				
+		
+		return playGamesTab;
+		
 	}
 	
 	private void createGUI() {
+
 
 		//Sets up the tabbed pane
 		final JTabbedPane tabbedPane = new JTabbedPane();
 
 
 		tabbedPane.addTab("View Teams", createViewTeamsTab());
-		tabbedPane.addTab("View Player", createViewPlayersTab());
+		tabbedPane.addTab("View Players", createViewPlayersTab());
 		tabbedPane.addTab("View Games", createViewGamesTab());
+		tabbedPane.addTab("Play Games!", createPlayGamesTab());
 
 
 
@@ -408,6 +531,8 @@ public class BaseballBrowserMain extends JApplet {
 					loadGames loader = new loadGames(gameModel,"*");
 					loader.execute();
 					loadGames = false;
+
+
 				}
 
 			}
@@ -516,6 +641,7 @@ public class BaseballBrowserMain extends JApplet {
 	}
 
 
+
 	public class loadPlayerHistory extends SwingWorker<Object[], Void >{
 
 		DefaultListModel dcm;
@@ -553,10 +679,10 @@ public class BaseballBrowserMain extends JApplet {
 
 	public class loadTeamHistory extends SwingWorker<Object[], Void >{
 
-		DefaultListModel dcm;
+		DefaultComboBoxModel dcm;
 
 
-		public loadTeamHistory(DefaultListModel teamModel){
+		public loadTeamHistory(DefaultComboBoxModel teamModel){
 			dcm = teamModel;
 		}
 
@@ -573,6 +699,10 @@ public class BaseballBrowserMain extends JApplet {
 
 				for( Object newRow : teams ) {
 					dcm.addElement( newRow );
+					String team = newRow.toString().split(" Total")[0];
+					teamsList.addElement(team);
+					playingTeamList1.addElement(team);
+					playingTeamList2.addElement(team);
 				}
 
 			} catch (InterruptedException | ExecutionException e) {
@@ -585,7 +715,6 @@ public class BaseballBrowserMain extends JApplet {
 		}
 
 	}
-
 	public class loadGames extends SwingWorker<Object[], Void>{
 
 		DefaultListModel dcm;
@@ -615,6 +744,9 @@ public class BaseballBrowserMain extends JApplet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			loadTeamHistory gameFilterLoader = new loadTeamHistory(filterModel);
+			gameFilterLoader.execute();
 
 
 
