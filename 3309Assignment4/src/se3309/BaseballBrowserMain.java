@@ -59,17 +59,22 @@ public class BaseballBrowserMain extends JApplet {
 	final JComboBox team1 = new JComboBox();
 	final JComboBox team2 = new JComboBox();
 	
+	JComboBox fireTeamList = new JComboBox();
+	
 
 	DefaultComboBoxModel teamModel;
 	DefaultListModel playerModel;
 	DefaultListModel gameModel;
 	DefaultComboBoxModel filterModel;
+	DefaultComboBoxModel fireTeamModel;
 	
 	DefaultComboBoxModel playingTeamList1 = new DefaultComboBoxModel();
 	DefaultComboBoxModel playingTeamList2 = new DefaultComboBoxModel();
 	
 	DefaultComboBoxModel contractList1 = new DefaultComboBoxModel();
 	DefaultComboBoxModel contractList2 = new DefaultComboBoxModel();
+	
+	DefaultListModel teamPlayersModel;
 
 	static ResultSet resultSet;
 	static JLabel playerDetail;
@@ -81,6 +86,8 @@ public class BaseballBrowserMain extends JApplet {
 	static JComboBox contractBox2;
 	static Connection db2Conn;
 	static Statement st;
+	
+	JTextField yearField = new JTextField("2013");
 	
 	JLabel odds1 = new JLabel("Odds1");
 	JLabel odds2 = new JLabel("Odds2");
@@ -257,7 +264,6 @@ public class BaseballBrowserMain extends JApplet {
 
 	public JPanel createViewTeamsTab(){
 
-		final JTextField yearField = new JTextField("2013");
 
 		teamList = new JList();
 
@@ -277,29 +283,18 @@ public class BaseballBrowserMain extends JApplet {
 		});
 
 		final JList teamPlayers = new JList();
-		final DefaultListModel teamPlayersModel = new DefaultListModel();
+		teamPlayersModel = new DefaultListModel();
 
 		teamPlayers.setModel(teamPlayersModel);
 
+		
 		teamList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
 				
-				if(loading)
-					return;
-
-				teamPlayersModel.clear();
-
-				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
-				String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
-
-				for(Object player: queryTeamPlayers(team,"2013")){
-					teamPlayersModel.addElement(player);
-				}
-
-				yearField.setText("2013");
+				updatePlayers();
 
 			}
 		});
@@ -365,6 +360,22 @@ public class BaseballBrowserMain extends JApplet {
 		return viewTeams;
 
 	}
+	
+	public void updatePlayers(){
+		if(loading)
+			return;
+
+		teamPlayersModel.clear();
+
+		//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
+		String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
+
+		for(Object player: queryTeamPlayers(team,"2013")){
+			teamPlayersModel.addElement(player);
+		}
+
+		yearField.setText("2013");
+	}
 
 	public JPanel createViewPlayersTab(){
 
@@ -381,6 +392,9 @@ public class BaseballBrowserMain extends JApplet {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
+				if(loading)
+					return;
+				
 				queryPlayerByYear(((String) playerList.getSelectedValue()).split(" #")[0]);
 			}
 		});
@@ -716,6 +730,132 @@ public class BaseballBrowserMain extends JApplet {
 		return salaryTab;
 	}
 	
+	public JPanel createFireTab(){
+		
+		fireTeamList = new JComboBox();
+
+		fireTeamModel = new DefaultComboBoxModel();
+		fireTeamList.setModel(teamModel);
+
+		JPanel viewFirePlayers = new JPanel();
+		viewFirePlayers.setLayout(new GridLayout(2,0));
+		
+		JPanel fireFlow = new JPanel();
+		fireFlow.add(fireTeamList);
+		
+		JPanel grid = new JPanel();
+		grid.setLayout(new GridLayout(2,0));
+		
+		grid.add(fireFlow);
+		
+		
+
+		final JList fireTeamPlayers = new JList();
+		final DefaultListModel fireTeamPlayersModel = new DefaultListModel();
+
+		fireTeamPlayers.setModel(fireTeamPlayersModel);
+
+		fireTeamList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				if(loading)
+					return;
+
+				fireTeamPlayersModel.clear();
+
+				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
+				String team = ((String) fireTeamList.getSelectedItem()).split(" Total")[0];
+
+				for(Object player: queryTeamPlayers(team,"2013")){
+					fireTeamPlayersModel.addElement(player);
+				}
+				
+			}
+		});
+
+		
+		
+		
+		viewFirePlayers.add(grid);
+		
+		JPanel fireBtnFlow = new JPanel();
+		fireBtnFlow.setLayout(new FlowLayout());
+		
+		JButton fireBtn = new JButton("FIRE");
+		
+		fireBtn.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				String name = fireTeamPlayers.getSelectedValue().toString().split(" #")[0];
+				String team = fireTeamList.getSelectedItem().toString().split(" Total")[0];
+				
+				try {
+					firePlayer(fireTeamPlayers.getSelectedValue().toString().split(" #")[0]);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				JOptionPane.showMessageDialog(null, "<html><body>You fired " + name + " from the " + team + "<br>You Monster</body></html>" );
+				
+				fireTeamList.setSelectedIndex(fireTeamList.getSelectedIndex());
+				updatePlayers();
+				
+				loadContracts = true;
+				loadPlayers = true;
+				
+				
+				
+			}
+			
+			
+		});
+		
+		fireBtnFlow.add(fireBtn);
+		
+		grid.add(fireBtnFlow);
+		
+		viewFirePlayers.add(new JScrollPane(fireTeamPlayers));
+		
+
+
+		return viewFirePlayers;
+	}
+	
+	public void firePlayer(String name) throws SQLException {
+		// TODO Auto-generated method stub
+		System.out.println(name);
+		
+		// use a statement to gather data from the database
+		st = db2Conn.createStatement();
+
+		String myQuery = "DELETE FROM playerHistory WHERE playerName='" + name + "'";
+		System.out.println(myQuery);//BOOK is a table name
+		
+		st.execute(myQuery); 		 // execute the query   
+		
+		myQuery = "DELETE FROM playerByYear WHERE playerName='" + name + "'";
+		System.out.println(myQuery);//BOOK is a table name
+		
+		st.execute(myQuery); 		 // execute the query  
+		
+		myQuery = "DELETE FROM contract WHERE playerName='" + name + "'";
+		System.out.println(myQuery);//BOOK is a table name
+		
+		st.execute(myQuery); 		 // execute the query  
+		
+		st.close();
+		
+		
+		
+		
+	}
+
 	private void executeTrade(String p1, String t1, String p2, String t2) {
 		try
 		{
@@ -791,7 +931,8 @@ public class BaseballBrowserMain extends JApplet {
 		tabbedPane.addTab("View Games", createViewGamesTab());
 		tabbedPane.addTab("Play Games!", createPlayGamesTab());
 		tabbedPane.addTab("Trade Players!", createTradeTab());
-		tabbedPane.addTab("Convert Salaries", createSalaryTab());
+		tabbedPane.addTab("Convert Salaries!", createSalaryTab());
+		tabbedPane.addTab("FIRE PEOPLE, RUIN THEIR LIVES!", createFireTab());
 
 
 
@@ -801,11 +942,13 @@ public class BaseballBrowserMain extends JApplet {
 
 
 				if(tabbedPane.getSelectedIndex() == 0 && loadTeams){
+					
 					loadTeamHistory loader = new loadTeamHistory(teamModel);
 					loader.execute();
 					loadTeams = false;
 				}
 				else if(tabbedPane.getSelectedIndex() == 1 && loadPlayers){
+					loading = true;
 					loadPlayerHistory loader = new loadPlayerHistory(playerModel);
 					loader.execute();
 					loadPlayers = false;
@@ -1045,10 +1188,14 @@ public class BaseballBrowserMain extends JApplet {
 		public void done() {
 			try {
 				Object[] players = get();
+				
+				dcm.removeAllElements();
 
 				for( Object newRow : players ) {
 					dcm.addElement( newRow );
 				}
+				
+				loading = false;
 
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
@@ -1091,6 +1238,8 @@ public class BaseballBrowserMain extends JApplet {
 						playingTeamList2.addElement(team);
 						
 					}
+					
+					fireTeamModel.addElement(team);
 				}
 				
 				loadGamesLists = false;
@@ -1185,8 +1334,6 @@ public class BaseballBrowserMain extends JApplet {
 
 			//loadContracts contractLoader = new loadContracts(contractList1, contractList2);
 			//contractLoader.execute();
-
-
 
 		}
 
