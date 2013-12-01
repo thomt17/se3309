@@ -1,2 +1,6 @@
 .classpath
 3309Assigment4/bin
+*.class
+*.html
+*.jar
+*.applet
