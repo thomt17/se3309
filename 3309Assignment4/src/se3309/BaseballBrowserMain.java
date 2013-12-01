@@ -51,6 +51,9 @@ public class BaseballBrowserMain extends JApplet {
 	
 	DefaultComboBoxModel playingTeamList1 = new DefaultComboBoxModel();
 	DefaultComboBoxModel playingTeamList2 = new DefaultComboBoxModel();
+	
+	DefaultComboBoxModel contractList1 = new DefaultComboBoxModel();
+	DefaultComboBoxModel contractList2 = new DefaultComboBoxModel();
 
 	static ResultSet resultSet;
 	static JLabel playerDetail;
@@ -68,6 +71,7 @@ public class BaseballBrowserMain extends JApplet {
 	boolean loadTeams = true;
 	boolean loadPlayers = true;
 	boolean loadGames = true;
+	boolean loadContracts = true;
 
 	public static Object[] queryPlayerHistory() {
 		ArrayList<String> playerHistories = new ArrayList<String>();
@@ -499,7 +503,90 @@ public class BaseballBrowserMain extends JApplet {
 	}
 	
 	public JPanel createTradeTab(){
-		return new JPanel();
+		JPanel tradeTab = new JPanel();
+		tradeTab.setLayout(new GridLayout(2,0));
+		
+		JPanel listPanel = new JPanel();
+		listPanel.setLayout(new FlowLayout());
+		
+		final JComboBox contractBox1 = new JComboBox();
+		contractBox1.setModel(contractList1);
+		
+		final JComboBox contractBox2 = new JComboBox();
+		contractBox2.setModel(contractList2);
+		
+		JButton tradeButton = new JButton("Make Trade!");
+		
+		tradeButton.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+
+				int index = contractBox1.getSelectedIndex();
+				String text1 = (String) contractList1.getElementAt(index);
+				String player1Name = (text1.split(" #")[0]);
+				String player1Team = (text1.split("from ")[1]).split(",")[0];
+				int index2 = contractBox2.getSelectedIndex();
+				String text2 = (String) contractList2.getElementAt(index2);
+				String player2Name = (text2.split(" #")[0]);
+				String player2Team = (text2.split("from ")[1]).split(",")[0];
+				executeTrade(player1Name,player1Team,player2Name,player2Team);
+				
+				//String playerNumber = (text.split(" #")[1]).split(",")[0];
+				//team2Wins = Integer.parseInt(wins);
+				//stats2.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
+
+			}
+		});
+		listPanel.add(contractBox1);
+		listPanel.add(contractBox2);
+		tradeTab.add(listPanel);
+		tradeTab.add(tradeButton);
+		
+		return tradeTab;
+	}
+	
+	private void executeTrade(String p1, String t1, String p2, String t2) {
+		try
+		{
+
+			// use a statement to gather data from the database
+			st = db2Conn.createStatement();
+
+			String myQuery1;
+
+			myQuery1 = "UPDATE Contract SET teamName='" + t2+"' WHERE playerName='"+p1+"'";  
+			System.out.println(myQuery1);//BOOK is a table name
+
+
+			st.execute(myQuery1); 		 // execute the query   
+			st.close();
+			st = db2Conn.createStatement();
+			String myQuery2 = "UPDATE Contract SET teamName='" + t1+"' WHERE playerName='"+p2+"'";
+			System.out.println(myQuery2);
+			st.execute(myQuery2);
+			/*while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
+			{
+				String winner = resultSet.getString("winningTeamName"); 	//These are column names
+				String loser = resultSet.getString("losingTeamName"); 		//These are column names
+				String year = resultSet.getString("year"); 		//These are column names
+				String date = resultSet.getString("date");
+				String location = resultSet.getString("location");
+				String winScore = resultSet.getString("winningTeamScore");
+				String loseScore = resultSet.getString("losingTeamScore");
+				text=(winner+" ("+winScore+") vs " + loser + "(" + loseScore + ") " + date  + " at " + location);
+				games.add(text);
+			}*/
+
+			// clean up resources
+			//resultSet.close();
+			st.close();
+			loadTeams=true;
+			loadContracts loadAgain = new loadContracts(contractList1,contractList2);
+			loadAgain.execute();
+		}
+		catch (SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
 	}
 	
 	private void createGUI() {
@@ -538,6 +625,11 @@ public class BaseballBrowserMain extends JApplet {
 					loadGames = false;
 
 
+				}
+				else if (tabbedPane.getSelectedIndex() == 4 && loadContracts) {
+					loadContracts loader = new loadContracts(contractList1,contractList2);
+					loader.execute();
+					loadContracts = false;
 				}
 
 			}
@@ -644,6 +736,43 @@ public class BaseballBrowserMain extends JApplet {
 		pbyFrame.setVisible(true);
 		pbyFrame.pack();
 	}
+	
+	public static Object[] queryContracts() {
+		ArrayList<String> contracts = new ArrayList<String>();
+		try
+		{
+			String text="";
+
+			// use a statement to gather data from the database
+			st = db2Conn.createStatement();
+
+			String myQuery;
+
+			myQuery = "SELECT * FROM Contract WHERE Year = 2013";      		//BOOK is a table name
+
+
+			resultSet = st.executeQuery(myQuery); 		 // execute the query         
+			while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
+			{
+				String playerName = resultSet.getString("playerName"); 	//These are column names
+				String playerNumber = resultSet.getString("playerNumber"); 		//These are column names
+				//String year = resultSet.getString("year"); 		//These are column names
+				String teamName = resultSet.getString("teamName");
+				String salary = resultSet.getString("salary");
+				text=(playerName+" #"+playerNumber+", from "+teamName+", earning $"+salary);
+				contracts.add(text);
+			}
+
+			// clean up resources
+			resultSet.close();
+			st.close();
+		}
+		catch (SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
+		return contracts.toArray();
+	}
 
 
 
@@ -734,6 +863,7 @@ public class BaseballBrowserMain extends JApplet {
 		protected Object[] doInBackground() throws Exception {
 			// TODO Auto-generated method stub
 			return queryGames(team);
+			
 		}
 
 		@Override
@@ -752,6 +882,48 @@ public class BaseballBrowserMain extends JApplet {
 
 			loadTeamHistory gameFilterLoader = new loadTeamHistory(filterModel);
 			gameFilterLoader.execute();
+
+
+
+		}
+
+	}
+	
+	public class loadContracts extends SwingWorker<Object[], Void>{
+
+		DefaultComboBoxModel dcm;
+		DefaultComboBoxModel dcm2;
+
+		public loadContracts(DefaultComboBoxModel contractModel1, DefaultComboBoxModel contractModel2){
+			dcm = contractModel1;
+			dcm2 = contractModel2;
+		}
+
+		@Override
+		protected Object[] doInBackground() throws Exception {
+			// TODO Auto-generated method stub
+			//return queryGames(team);
+			return queryContracts();
+		}
+
+		@Override
+		public void done() {
+			try {
+				Object[] contracts = get();
+
+				for( Object newRow : contracts ) {
+					dcm.addElement( newRow );
+					dcm2.addElement(newRow);
+				}
+				
+
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			//loadContracts contractLoader = new loadContracts(contractList1, contractList2);
+			//contractLoader.execute();
 
 
 
