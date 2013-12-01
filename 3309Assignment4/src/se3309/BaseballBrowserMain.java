@@ -548,6 +548,40 @@ public class BaseballBrowserMain extends JApplet {
 		return tradeTab;
 	}
 	
+	public JPanel createSalaryTab() {
+		JPanel salaryTab = new JPanel();
+		salaryTab.setLayout(new GridLayout(2,0));
+		JPanel textPanel = new JPanel();
+		textPanel.setLayout(new FlowLayout());
+		JLabel instructLabel = new JLabel("Enter a % to raise or cut salaries by: ");
+		final JTextField modifierBox = new JTextField(20);
+		textPanel.add(instructLabel);
+		textPanel.add(modifierBox);
+		salaryTab.add(textPanel);
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new FlowLayout());
+		JButton raiseButton = new JButton("Raise");
+		raiseButton.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+
+				double mod = Double.parseDouble(modifierBox.getText());
+				convertSalaries(mod);
+			}
+		});
+		JButton cutButton = new JButton("Cut");
+		cutButton.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+
+				double mod = Double.parseDouble(modifierBox.getText());
+				convertSalaries(mod*(-1));
+			}
+		});
+		buttons.add(raiseButton);
+		buttons.add(cutButton);
+		salaryTab.add(buttons);
+		return salaryTab;
+	}
+	
 	private void executeTrade(String p1, String t1, String p2, String t2) {
 		try
 		{
@@ -595,6 +629,36 @@ public class BaseballBrowserMain extends JApplet {
 		}
 	}
 	
+	private void convertSalaries(double mod) {
+		try
+		{
+
+			// use a statement to gather data from the database
+			st = db2Conn.createStatement();
+
+			String myQuery;
+
+			myQuery = "UPDATE Contract SET salary=salary +salary *" +(mod*0.01);  
+			System.out.println(myQuery);//BOOK is a table name
+
+
+			st.execute(myQuery); 		 // execute the query   
+			st.close();
+			st = db2Conn.createStatement();
+			
+			st.close();
+			loadTeams=true;
+			contractList1.removeAllElements();
+			contractList2.removeAllElements();
+			loadContracts loadAgain = new loadContracts(contractList1,contractList2);
+			loadAgain.execute();
+		}
+		catch (SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
+	}
+	
 	private void createGUI() {
 
 
@@ -607,6 +671,7 @@ public class BaseballBrowserMain extends JApplet {
 		tabbedPane.addTab("View Games", createViewGamesTab());
 		tabbedPane.addTab("Play Games!", createPlayGamesTab());
 		tabbedPane.addTab("Trade Players!", createTradeTab());
+		tabbedPane.addTab("Convert Salaries", createSalaryTab());
 
 
 
@@ -632,7 +697,7 @@ public class BaseballBrowserMain extends JApplet {
 
 
 				}
-				else if (tabbedPane.getSelectedIndex() == 4 && loadContracts) {
+				else if (((tabbedPane.getSelectedIndex() == 4) || (tabbedPane.getSelectedIndex() == 5)) && loadContracts) {
 					loadContracts loader = new loadContracts(contractList1,contractList2);
 					loader.execute();
 					loadContracts = false;
