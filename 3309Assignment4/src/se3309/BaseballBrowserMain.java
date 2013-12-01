@@ -49,6 +49,7 @@ public class BaseballBrowserMain extends JApplet {
 	int team2Losses;
 	String team1Text;
 	String team2Text;
+
 	
 	double team1Weight;
 	double team2Weight;
@@ -79,14 +80,13 @@ public class BaseballBrowserMain extends JApplet {
 	JLabel odds1 = new JLabel("Odds1");
 	JLabel odds2 = new JLabel("Odds2");
 	
-	
-	DefaultComboBoxModel teamsList = new DefaultComboBoxModel();
-
-
 
 	boolean loadTeams = true;
 	boolean loadPlayers = true;
 	boolean loadGames = true;
+	boolean loadGamesLists = true;
+	
+	boolean loading = false;
 
 	public static Object[] queryPlayerHistory() {
 		ArrayList<String> playerHistories = new ArrayList<String>();
@@ -279,6 +279,9 @@ public class BaseballBrowserMain extends JApplet {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
+				
+				if(loading)
+					return;
 
 				teamPlayersModel.clear();
 
@@ -418,6 +421,7 @@ public class BaseballBrowserMain extends JApplet {
 			public void actionPerformed(ActionEvent e) {
 
 				if(((String) teamFilter.getSelectedItem()).equals("<None>")){
+					gameModel.clear();
 					loadGames loader = new loadGames(gameModel,"*");
 					loader.execute();
 					return;
@@ -457,7 +461,8 @@ public class BaseballBrowserMain extends JApplet {
 		
 		team1.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
-
+			
+				
 				int index = team1.getSelectedIndex();
 				String text = (String) teamModel.getElementAt(index);
 				String wins = (text.split("Total Wins:")[1]).split(",")[0];
@@ -486,6 +491,7 @@ public class BaseballBrowserMain extends JApplet {
 		
 		team2.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
+				
 
 				int index = team2.getSelectedIndex();
 				String text = (String) teamModel.getElementAt(index);
@@ -588,9 +594,11 @@ public class BaseballBrowserMain extends JApplet {
 					String winScore = new DecimalFormat("#").format(10 + (Math.random() * (17 - 10)));
 					String loseScore = new DecimalFormat("#").format( 0 + (Math.random() * (9 - 0)));
 					
-					newGame(team1.getSelectedItem().toString(), team2.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20),  winScore, loseScore);
+					
 					
 					JOptionPane.showMessageDialog(null, team1.getSelectedItem().toString() +"(" + winScore + ") Won vs " + team2.getSelectedItem().toString() + "(" + loseScore + ")");
+					
+					newGame(team1.getSelectedItem().toString(), team2.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20),  winScore, loseScore);
 				}
 				
 				//team2 wins
@@ -599,9 +607,11 @@ public class BaseballBrowserMain extends JApplet {
 					String winScore = new DecimalFormat("#").format(10 + (Math.random() * (17 - 10)));
 					String loseScore = new DecimalFormat("#").format( 0 + (Math.random() * (9 - 0)));
 					
-					newGame(team2.getSelectedItem().toString(), team1.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20), winScore, loseScore);
+					
 					
 					JOptionPane.showMessageDialog(null, team2.getSelectedItem().toString() +"(" + winScore + ") Won vs " + team1.getSelectedItem().toString() + "(" + loseScore + ")");
+					
+					newGame(team2.getSelectedItem().toString(), team1.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20), winScore, loseScore);
 					
 				}
 				
@@ -690,10 +700,33 @@ public class BaseballBrowserMain extends JApplet {
 		
 		String myQuery = "INSERT INTO GAME VALUES('" + winner + "','" + loser + "'," + year + ",'" + date + "','" + location + "'," + winScore + "," + loseScore + ")" ; 
 		
-		System.out.println(myQuery);
+		
+		int winnerWins = -1;
+		int loserLosses = -1;
+		
+		if(team1.getSelectedItem().toString().equals(winner)){
+			winnerWins = team1Wins;
+			loserLosses = team2Losses;
+		}
+		else{
+			winnerWins = team2Wins;
+			loserLosses = team2Losses;
+		}
+			
+			winnerWins++;
+			loserLosses++;
+			
+		String updateQuery1 = "UPDATE teamHistory SET totalWins=" + winnerWins + " WHERE teamName='" + winner + "'";
+		System.out.println(updateQuery1);
+		
+		String updateQuery2 = "UPDATE teamHistory SET totalLosses=" + loserLosses + " WHERE teamName='" + loser + "'";
+		System.out.println(updateQuery2);
+		
 		
 		try {
 			st.execute(myQuery);
+			st.execute(updateQuery1);
+			st.execute(updateQuery2);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -706,7 +739,14 @@ public class BaseballBrowserMain extends JApplet {
 			e.printStackTrace();
 		}
 		
-		loadGames = true;
+		loading = true;
+		
+		teamModel.removeAllElements();
+		
+		
+		loadTeamHistory loader = new loadTeamHistory(teamModel);
+		loader.execute();
+		loadTeams = false;
 		
 	}
 
@@ -799,7 +839,6 @@ public class BaseballBrowserMain extends JApplet {
 	}
 
 
-
 	public class loadPlayerHistory extends SwingWorker<Object[], Void >{
 
 		DefaultListModel dcm;
@@ -852,16 +891,27 @@ public class BaseballBrowserMain extends JApplet {
 
 		@Override
 		public void done() {
+			
 			try {
 				Object[] teams = get();
 
 				for( Object newRow : teams ) {
 					dcm.addElement( newRow );
 					String team = newRow.toString().split(" Total")[0];
-					teamsList.addElement(team);
-					playingTeamList1.addElement(team);
-					playingTeamList2.addElement(team);
+					
+					if(loadGamesLists){
+						playingTeamList1.addElement(team);
+						playingTeamList2.addElement(team);
+						
+					}
 				}
+				
+				loadGamesLists = false;
+				loading = false;
+				
+				team1.setSelectedIndex(team1.getSelectedIndex());
+				team2.setSelectedIndex(team2.getSelectedIndex());
+				
 
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
