@@ -61,6 +61,8 @@ public class BaseballBrowserMain extends JApplet {
 	static JList teamPlayerList;
 	static JList teamList;
 	static JList gameList;
+	static JComboBox contractBox1;
+	static JComboBox contractBox2;
 	static Connection db2Conn;
 	static Statement st;
 	
@@ -509,10 +511,12 @@ public class BaseballBrowserMain extends JApplet {
 		JPanel listPanel = new JPanel();
 		listPanel.setLayout(new FlowLayout());
 		
-		final JComboBox contractBox1 = new JComboBox();
+		final JComboBox cb1 = new JComboBox();
+		contractBox1 = cb1;
 		contractBox1.setModel(contractList1);
 		
-		final JComboBox contractBox2 = new JComboBox();
+		final JComboBox cb2 = new JComboBox();
+		contractBox2 = cb2;
 		contractBox2.setModel(contractList2);
 		
 		JButton tradeButton = new JButton("Make Trade!");
@@ -520,11 +524,11 @@ public class BaseballBrowserMain extends JApplet {
 		tradeButton.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 
-				int index = contractBox1.getSelectedIndex();
+				int index = cb1.getSelectedIndex();
 				String text1 = (String) contractList1.getElementAt(index);
 				String player1Name = (text1.split(" #")[0]);
 				String player1Team = (text1.split("from ")[1]).split(",")[0];
-				int index2 = contractBox2.getSelectedIndex();
+				int index2 = cb2.getSelectedIndex();
 				String text2 = (String) contractList2.getElementAt(index2);
 				String player2Name = (text2.split(" #")[0]);
 				String player2Team = (text2.split("from ")[1]).split(",")[0];
@@ -536,8 +540,8 @@ public class BaseballBrowserMain extends JApplet {
 
 			}
 		});
-		listPanel.add(contractBox1);
-		listPanel.add(contractBox2);
+		listPanel.add(cb1);
+		listPanel.add(cb2);
 		tradeTab.add(listPanel);
 		tradeTab.add(tradeButton);
 		
@@ -580,6 +584,8 @@ public class BaseballBrowserMain extends JApplet {
 			//resultSet.close();
 			st.close();
 			loadTeams=true;
+			contractList1.removeAllElements();
+			contractList2.removeAllElements();
 			loadContracts loadAgain = new loadContracts(contractList1,contractList2);
 			loadAgain.execute();
 		}
