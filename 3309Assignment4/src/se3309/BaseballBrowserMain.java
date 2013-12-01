@@ -8,7 +8,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
@@ -43,6 +45,20 @@ public class BaseballBrowserMain extends JApplet {
 	
 	int team1Wins;
 	int team2Wins;
+	int team1Losses;
+	int team2Losses;
+	String team1Text;
+	String team2Text;
+
+	
+	double team1Weight;
+	double team2Weight;
+	double team1odds;
+	double team2odds;
+	
+	final JComboBox team1 = new JComboBox();
+	final JComboBox team2 = new JComboBox();
+	
 
 	DefaultComboBoxModel teamModel;
 	DefaultListModel playerModel;
@@ -66,14 +82,18 @@ public class BaseballBrowserMain extends JApplet {
 	static Connection db2Conn;
 	static Statement st;
 	
-	DefaultComboBoxModel teamsList = new DefaultComboBoxModel();
-
-
+	JLabel odds1 = new JLabel("Odds1");
+	JLabel odds2 = new JLabel("Odds2");
+	
 
 	boolean loadTeams = true;
 	boolean loadPlayers = true;
 	boolean loadGames = true;
 	boolean loadContracts = true;
+	boolean loadGamesLists = true;
+	
+	boolean loading = false;
+
 
 	public static Object[] queryPlayerHistory() {
 		ArrayList<String> playerHistories = new ArrayList<String>();
@@ -266,6 +286,9 @@ public class BaseballBrowserMain extends JApplet {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
+				
+				if(loading)
+					return;
 
 				teamPlayersModel.clear();
 
@@ -405,6 +428,7 @@ public class BaseballBrowserMain extends JApplet {
 			public void actionPerformed(ActionEvent e) {
 
 				if(((String) teamFilter.getSelectedItem()).equals("<None>")){
+					gameModel.clear();
 					loadGames loader = new loadGames(gameModel,"*");
 					loader.execute();
 					return;
@@ -436,7 +460,7 @@ public class BaseballBrowserMain extends JApplet {
 		
 		
 		
-		final JComboBox team1 = new JComboBox();
+		
 		team1.setModel(playingTeamList1);
 		
 		final JLabel stats1 = new JLabel();
@@ -444,34 +468,62 @@ public class BaseballBrowserMain extends JApplet {
 		
 		team1.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
-
+			
+				
 				int index = team1.getSelectedIndex();
 				String text = (String) teamModel.getElementAt(index);
 				String wins = (text.split("Total Wins:")[1]).split(",")[0];
-				String losses = (text.split("Total Losses:")[1]).split(",")[0];
+				String losses = (text.split("Total Losses: ")[1]).split(",")[0];
 				team1Wins = Integer.parseInt(wins);
+				team1Losses = Integer.parseInt(losses);
+				
+				
+				double sum = team1Wins + team1Losses;
+				
+				team1Weight = (team1Wins / sum) * 100;
+				
+				team1odds = team1Weight / (team1Weight + team2Weight) * 100;
+				team2odds = team2Weight / (team1Weight + team2Weight) * 100;
+				
 				stats1.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
+				
+				odds1.setText(new DecimalFormat("#.##").format(team1odds) + "% Odds");
+				odds2.setText(new DecimalFormat("#.##").format(team2odds) + "% Odds");
 
 			}
 		});
 		
 		
-		
-		final JComboBox team2 = new JComboBox();
 		team2.setModel(playingTeamList2);
 		
 		team2.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
+				
 
 				int index = team2.getSelectedIndex();
 				String text = (String) teamModel.getElementAt(index);
 				String wins = (text.split("Total Wins:")[1]).split(",")[0];
-				String losses = (text.split("Total Losses:")[1]).split(",")[0];
+				String losses = (text.split("Total Losses: ")[1]).split(",")[0];
 				team2Wins = Integer.parseInt(wins);
+				team2Losses = Integer.parseInt(losses);
+				
+				//team2Weight = (team2Wins / (team2Wins + team2Losses)) * 100;
+				
+				double sum = team2Wins + team2Losses;
+				
+				team2Weight = (team2Wins / sum) * 100;
+				
+				team1odds = team1Weight / (team1Weight + team2Weight) * 100;
+				team2odds = team2Weight / (team1Weight + team2Weight) * 100;
+				
 				stats2.setText("<html><body>Total Wins: " + wins + "<br> Total Losses: " + losses + "</body></html>");
-
+				
+				odds1.setText(new DecimalFormat("#.##").format(team1odds) + "% Odds");
+				odds2.setText(new DecimalFormat("#.##").format(team2odds) + "% Odds");
+				
 			}
 		});
+		
 		
 		JLabel versus = new JLabel(" VS ");
 		
@@ -480,19 +532,100 @@ public class BaseballBrowserMain extends JApplet {
 		listPanel.add(team2);
 		
 		JPanel stats = new JPanel();
-		stats.setLayout(new GridLayout(0,2));
+		stats.setLayout(new GridLayout(2,2));
 		
-		stats.add(stats1);
-		stats.add(stats2);
+		
+		JPanel flowStats1 = new JPanel();
+		flowStats1.setLayout(new FlowLayout());
+		
+		flowStats1.add(stats1);
+		
+		JPanel flowStats2 = new JPanel();
+		flowStats2.setLayout(new FlowLayout());
+		
+		flowStats2.add(stats2);
+		
+		
+		
+		JPanel odds1Flow = new JPanel();
+		odds1Flow.setLayout(new FlowLayout());
+		odds1Flow.add(odds1);
+		
+		
+		JPanel odds2Flow = new JPanel();
+		odds2Flow.setLayout(new FlowLayout());
+		odds2Flow.add(odds2);
+		
+		stats.add(flowStats1);
+		
+		stats.add(flowStats2);
+		stats.add(odds1Flow);
+		stats.add(odds2Flow);
 		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		JLabel location = new JLabel("Location: ");
-		JTextField locationField = new JTextField();
-		locationField.setPreferredSize(new Dimension(100, 20));
 		JButton playGame = new JButton("Simulate Game");
-		buttons.add(location);
-		buttons.add(locationField);
+		
+		
+		
+		playGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				
+				if(team1.getSelectedItem().toString().equals(team2.getSelectedItem().toString())){
+					JOptionPane.showMessageDialog(null, "A team can't play itself!");
+					return;
+				}
+				
+				double sumWeight = team1Weight + team2Weight;
+				
+				double random = Math.random() * sumWeight;
+				
+				double[] teamWeights = new double[2];
+				
+				teamWeights[0] = team1Weight;
+				teamWeights[1] = team2Weight;
+				
+				int winner = -1;
+				
+				for(int i=0; i < 1; i++) {
+					  if(random < teamWeights[i]){
+					    winner = i;
+					    break;
+					  }
+					  random -= teamWeights[i];
+				}
+				
+				//team1 Wins
+				if(winner == 0)
+				{
+					String winScore = new DecimalFormat("#").format(10 + (Math.random() * (17 - 10)));
+					String loseScore = new DecimalFormat("#").format( 0 + (Math.random() * (9 - 0)));
+					
+					
+					
+					JOptionPane.showMessageDialog(null, team1.getSelectedItem().toString() +"(" + winScore + ") Won vs " + team2.getSelectedItem().toString() + "(" + loseScore + ")");
+					
+					newGame(team1.getSelectedItem().toString(), team2.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20),  winScore, loseScore);
+				}
+				
+				//team2 wins
+				else{
+					
+					String winScore = new DecimalFormat("#").format(10 + (Math.random() * (17 - 10)));
+					String loseScore = new DecimalFormat("#").format( 0 + (Math.random() * (9 - 0)));
+					
+					
+					
+					JOptionPane.showMessageDialog(null, team2.getSelectedItem().toString() +"(" + winScore + ") Won vs " + team1.getSelectedItem().toString() + "(" + loseScore + ")");
+					
+					newGame(team2.getSelectedItem().toString(), team1.getSelectedItem().toString(), "2013", "2013-01-01", generateString(20), winScore, loseScore);
+					
+				}
+				
+				
+			}
+		});
+		
 		buttons.add(playGame);
 		
 		playGamesTab.add(listPanel);
@@ -503,6 +636,7 @@ public class BaseballBrowserMain extends JApplet {
 		return playGamesTab;
 		
 	}
+
 	
 	public JPanel createTradeTab(){
 		JPanel tradeTab = new JPanel();
@@ -601,21 +735,7 @@ public class BaseballBrowserMain extends JApplet {
 			String myQuery2 = "UPDATE Contract SET teamName='" + t1+"' WHERE playerName='"+p2+"'";
 			System.out.println(myQuery2);
 			st.execute(myQuery2);
-			/*while (resultSet.next())				 // cycle through the resulSet and display what was grabbed
-			{
-				String winner = resultSet.getString("winningTeamName"); 	//These are column names
-				String loser = resultSet.getString("losingTeamName"); 		//These are column names
-				String year = resultSet.getString("year"); 		//These are column names
-				String date = resultSet.getString("date");
-				String location = resultSet.getString("location");
-				String winScore = resultSet.getString("winningTeamScore");
-				String loseScore = resultSet.getString("losingTeamScore");
-				text=(winner+" ("+winScore+") vs " + loser + "(" + loseScore + ") " + date  + " at " + location);
-				games.add(text);
-			}*/
-
-			// clean up resources
-			//resultSet.close();
+			
 			st.close();
 			loadTeams=true;
 			contractList1.removeAllElements();
@@ -694,8 +814,6 @@ public class BaseballBrowserMain extends JApplet {
 					loadGames loader = new loadGames(gameModel,"*");
 					loader.execute();
 					loadGames = false;
-
-
 				}
 				else if (((tabbedPane.getSelectedIndex() == 4) || (tabbedPane.getSelectedIndex() == 5)) && loadContracts) {
 					loadContracts loader = new loadContracts(contractList1,contractList2);
@@ -718,6 +836,68 @@ public class BaseballBrowserMain extends JApplet {
 
 
 
+	}
+	
+	public void newGame(String winner, String loser, String year, String date, String location, String winScore, String loseScore){
+		
+		// use a statement to gather data from the database
+		try {
+			st = db2Conn.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String myQuery = "INSERT INTO GAME VALUES('" + winner + "','" + loser + "'," + year + ",'" + date + "','" + location + "'," + winScore + "," + loseScore + ")" ; 
+		
+		
+		int winnerWins = -1;
+		int loserLosses = -1;
+		
+		if(team1.getSelectedItem().toString().equals(winner)){
+			winnerWins = team1Wins;
+			loserLosses = team2Losses;
+		}
+		else{
+			winnerWins = team2Wins;
+			loserLosses = team2Losses;
+		}
+			
+			winnerWins++;
+			loserLosses++;
+			
+		String updateQuery1 = "UPDATE teamHistory SET totalWins=" + winnerWins + " WHERE teamName='" + winner + "'";
+		System.out.println(updateQuery1);
+		
+		String updateQuery2 = "UPDATE teamHistory SET totalLosses=" + loserLosses + " WHERE teamName='" + loser + "'";
+		System.out.println(updateQuery2);
+		
+		
+		try {
+			st.execute(myQuery);
+			st.execute(updateQuery1);
+			st.execute(updateQuery2);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			st.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		loading = true;
+		
+		teamModel.removeAllElements();
+		
+		
+		loadTeamHistory loader = new loadTeamHistory(teamModel);
+		loader.execute();
+		loadTeams = false;
+		
 	}
 
 	public static void queryPlayerByYear(String playerName) {
@@ -846,7 +1026,6 @@ public class BaseballBrowserMain extends JApplet {
 	}
 
 
-
 	public class loadPlayerHistory extends SwingWorker<Object[], Void >{
 
 		DefaultListModel dcm;
@@ -899,16 +1078,27 @@ public class BaseballBrowserMain extends JApplet {
 
 		@Override
 		public void done() {
+			
 			try {
 				Object[] teams = get();
 
 				for( Object newRow : teams ) {
 					dcm.addElement( newRow );
 					String team = newRow.toString().split(" Total")[0];
-					teamsList.addElement(team);
-					playingTeamList1.addElement(team);
-					playingTeamList2.addElement(team);
+					
+					if(loadGamesLists){
+						playingTeamList1.addElement(team);
+						playingTeamList2.addElement(team);
+						
+					}
 				}
+				
+				loadGamesLists = false;
+				loading = false;
+				
+				team1.setSelectedIndex(team1.getSelectedIndex());
+				team2.setSelectedIndex(team2.getSelectedIndex());
+				
 
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
@@ -1002,6 +1192,19 @@ public class BaseballBrowserMain extends JApplet {
 
 	}
 
+	public static String generateString(int length)
+	{
+		String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		Random rng = new Random();
+		
+	    char[] text = new char[length];
+	    for (int i = 0; i < length; i++)
+	    {
+	        text[i] = characters.charAt(rng.nextInt(characters.length()));
+	    }
+	    return new String(text);
+	}
 
 
 }
