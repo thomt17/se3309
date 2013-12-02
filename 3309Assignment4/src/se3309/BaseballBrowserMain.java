@@ -277,7 +277,12 @@ public class BaseballBrowserMain extends JApplet {
 		JButton viewTeamsBtn = new JButton("View Team History");
 		viewTeamsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				try {
 				queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
+				}
+				catch (NullPointerException e) {
+					
+				}
 
 			}
 		});
@@ -293,8 +298,12 @@ public class BaseballBrowserMain extends JApplet {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+				try {
 				updatePlayers();
+				}
+				catch (NumberFormatException n) {
+					JOptionPane.showMessageDialog(playerList, "The year must be all numbers!");
+				}
 
 			}
 		});
@@ -332,10 +341,18 @@ public class BaseballBrowserMain extends JApplet {
 				teamPlayersModel.clear();
 
 				//queryTeamByYear(((String) teamList.getSelectedValue()).split(" Total")[0]);
+				try {
 				String team = ((String) teamList.getSelectedValue()).split(" Total")[0];
-
+				Double year = Double.parseDouble(yearField.getText());
 				for(Object player: queryTeamPlayers(team, yearField.getText())){
 					teamPlayersModel.addElement(player);
+				}
+				}
+				catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(playerList, "The year must be all numbers!");
+				}
+				catch (NullPointerException e) {
+					
 				}
 
 			}
@@ -711,17 +728,26 @@ public class BaseballBrowserMain extends JApplet {
 		JButton raiseButton = new JButton("Raise");
 		raiseButton.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
-
+				try {
 				double mod = Double.parseDouble(modifierBox.getText());
 				convertSalaries(mod);
+				}
+				catch (NumberFormatException n) {
+					JOptionPane.showMessageDialog(modifierBox,"The % value must be a number!");
+				}
 			}
 		});
 		JButton cutButton = new JButton("Cut");
 		cutButton.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 
-				double mod = Double.parseDouble(modifierBox.getText());
-				convertSalaries(mod*(-1));
+				try {
+					double mod = Double.parseDouble(modifierBox.getText());
+					convertSalaries(mod*(-1));
+					}
+					catch (NumberFormatException n) {
+						JOptionPane.showMessageDialog(modifierBox,"The % value must be a number!");
+					}
 			}
 		});
 		buttons.add(raiseButton);
@@ -790,7 +816,7 @@ public class BaseballBrowserMain extends JApplet {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				try {
 				String name = fireTeamPlayers.getSelectedValue().toString().split(" #")[0];
 				String team = fireTeamList.getSelectedItem().toString().split(" Total")[0];
 				
@@ -808,6 +834,10 @@ public class BaseballBrowserMain extends JApplet {
 				
 				loadContracts = true;
 				loadPlayers = true;
+				}
+				catch (NullPointerException n) {
+					
+				}
 				
 				
 				
