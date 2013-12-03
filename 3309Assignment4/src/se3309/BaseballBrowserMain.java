@@ -680,10 +680,14 @@ public class BaseballBrowserMain extends JApplet {
 		contractBox1 = cb1;
 		contractBox1.setModel(contractList1);
 		
+		JLabel forLabel = new JLabel(" for ");
+		
 		final JComboBox cb2 = new JComboBox();
 		contractBox2 = cb2;
 		contractBox2.setModel(contractList2);
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
 		JButton tradeButton = new JButton("Make Trade!");
 		
 		tradeButton.addActionListener (new ActionListener () {
@@ -706,9 +710,11 @@ public class BaseballBrowserMain extends JApplet {
 			}
 		});
 		listPanel.add(cb1);
+		listPanel.add(forLabel);
 		listPanel.add(cb2);
 		tradeTab.add(listPanel);
-		tradeTab.add(tradeButton);
+		buttonPanel.add(tradeButton);
+		tradeTab.add(buttonPanel);
 		
 		return tradeTab;
 	}
